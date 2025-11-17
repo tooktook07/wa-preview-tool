@@ -1,21 +1,25 @@
 import { parseWhatsAppFormatting, detectRTL, detectLineDirection } from "@/utils/formatParser";
 import { useMemo } from "react";
-import PreviewControls, { ThemeMode, DeviceMode } from "./PreviewControls";
+import PreviewControls, { ThemeMode, DeviceMode, MessageMode } from "./PreviewControls";
 
 interface WhatsAppPreviewProps {
   message: string;
   theme: ThemeMode;
   device: DeviceMode;
+  mode: MessageMode;
   onThemeChange: (theme: ThemeMode) => void;
   onDeviceChange: (device: DeviceMode) => void;
+  onModeChange: (mode: MessageMode) => void;
 }
 
 export default function WhatsAppPreview({ 
   message, 
   theme, 
   device,
+  mode,
   onThemeChange,
-  onDeviceChange 
+  onDeviceChange,
+  onModeChange
 }: WhatsAppPreviewProps) {
   // Detect if message has any RTL content (for overall layout comfort)
   const isRTL = useMemo(() => detectRTL(message), [message]);
@@ -24,7 +28,9 @@ export default function WhatsAppPreview({
 
   // Theme-specific colors
   const bgColor = theme === "dark" ? "#0b141a" : "#efeae2";
-  const bubbleColor = theme === "dark" ? "#005c4b" : "#d9fdd3";
+  const bubbleColor = mode === "sender" 
+    ? (theme === "dark" ? "#005c4b" : "#d9fdd3")
+    : (theme === "dark" ? "#202c33" : "#ffffff");
   const textColor = theme === "dark" ? "#e9edef" : "#111b21";
   const headerBg = theme === "dark" ? "#202c33" : "#008069";
   const headerText = "#ffffff";
@@ -45,8 +51,10 @@ export default function WhatsAppPreview({
         <PreviewControls
           theme={theme}
           device={device}
+          mode={mode}
           onThemeChange={onThemeChange}
           onDeviceChange={onDeviceChange}
+          onModeChange={onModeChange}
         />
       </div>
       
@@ -131,15 +139,15 @@ export default function WhatsAppPreview({
                       >
                         <div className="flex flex-col gap-2 max-w-full">
                           {/* Message Bubble */}
-                          <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'}`}>
+                          <div className={`flex ${mode === "sender" ? 'justify-end' : 'justify-start'}`}>
                             <div 
                               className="relative rounded-lg shadow-md transition-all duration-200 max-w-[75%]"
                               style={{ backgroundColor: bubbleColor }}
                             >
                               <div 
-                                className={`absolute top-0 ${isRTL ? 'left-0 -ml-2' : 'right-0 -mr-2'} w-0 h-0 
+                                className={`absolute top-0 ${mode === "sender" ? 'right-0 -mr-2' : 'left-0 -ml-2'} w-0 h-0 
                                   border-t-[10px]
-                                  ${isRTL ? 'border-r-[10px] border-r-transparent' : 'border-l-[10px] border-l-transparent'}`}
+                                  ${mode === "sender" ? 'border-l-[10px] border-l-transparent' : 'border-r-[10px] border-r-transparent'}`}
                                 style={{ borderTopColor: bubbleColor }}
                               />
                               
@@ -171,13 +179,15 @@ export default function WhatsAppPreview({
                                         hour12: false 
                                       })}
                                     </span>
-                                    <svg 
-                                      viewBox="0 0 16 15" 
-                                      className="w-3.5 h-3.5 text-blue-500"
-                                      fill="currentColor"
-                                    >
-                                      <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/>
-                                    </svg>
+                                    {mode === "sender" && (
+                                      <svg 
+                                        viewBox="0 0 16 15" 
+                                        className="w-3.5 h-3.5 text-blue-500"
+                                        fill="currentColor"
+                                      >
+                                        <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/>
+                                      </svg>
+                                    )}
                                   </div>
                                 )}
                               </div>
@@ -301,13 +311,15 @@ export default function WhatsAppPreview({
                                 hour12: false 
                               })}
                             </span>
-                            <svg 
-                              viewBox="0 0 16 15" 
-                              className="w-4 h-4 text-blue-500"
-                              fill="currentColor"
-                            >
-                              <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/>
-                            </svg>
+                            {mode === "sender" && (
+                              <svg 
+                                viewBox="0 0 16 15" 
+                                className="w-4 h-4 text-blue-500"
+                                fill="currentColor"
+                              >
+                                <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/>
+                              </svg>
+                            )}
                           </div>
                         )}
                       </div>
