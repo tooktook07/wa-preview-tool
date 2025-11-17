@@ -91,11 +91,11 @@ export default function PreviewControls({
               variant="ghost"
               size="sm"
               onClick={() => onThemeChange("light")}
-              className={`rounded-none h-8 px-3 transition-colors ${
+              className={`rounded-none h-7 px-2.5 transition-colors ${
                 theme === "light" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
-              <Sun className="h-4 w-4" />
+              <Sun className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Light Mode</TooltipContent>
@@ -107,11 +107,11 @@ export default function PreviewControls({
               variant="ghost"
               size="sm"
               onClick={() => onThemeChange("dark")}
-              className={`rounded-none h-8 px-3 border-l border-border transition-colors ${
+              className={`rounded-none h-7 px-2.5 border-l border-border transition-colors ${
                 theme === "dark" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
-              <Moon className="h-4 w-4" />
+              <Moon className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Dark Mode</TooltipContent>
@@ -126,11 +126,11 @@ export default function PreviewControls({
               variant="ghost"
               size="sm"
               onClick={() => onDeviceChange("mobile")}
-              className={`rounded-none h-8 px-3 transition-colors ${
+              className={`rounded-none h-7 px-2.5 transition-colors ${
                 device === "mobile" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
-              <Smartphone className="h-4 w-4" />
+              <Smartphone className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Mobile View</TooltipContent>
@@ -142,11 +142,11 @@ export default function PreviewControls({
               variant="ghost"
               size="sm"
               onClick={() => onDeviceChange("desktop")}
-              className={`rounded-none h-8 px-3 border-l border-border transition-colors ${
+              className={`rounded-none h-7 px-2.5 border-l border-border transition-colors ${
                 device === "desktop" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
-              <Monitor className="h-4 w-4" />
+              <Monitor className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Desktop View</TooltipContent>
@@ -161,11 +161,11 @@ export default function PreviewControls({
               variant="ghost"
               size="sm"
               onClick={() => onModeChange("sender")}
-              className={`rounded-none h-8 px-3 transition-colors ${
+              className={`rounded-none h-7 px-2.5 transition-colors ${
                 mode === "sender" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Sender View</TooltipContent>
@@ -177,11 +177,11 @@ export default function PreviewControls({
               variant="ghost"
               size="sm"
               onClick={() => onModeChange("receiver")}
-              className={`rounded-none h-8 px-3 border-l border-border transition-colors ${
+              className={`rounded-none h-7 px-2.5 border-l border-border transition-colors ${
                 mode === "receiver" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
-              <UserCircle className="h-4 w-4" />
+              <UserCircle className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Receiver View</TooltipContent>
