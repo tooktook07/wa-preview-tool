@@ -13,6 +13,10 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Calculate character and word count
+  const characterCount = value.length;
+  const wordCount = value.trim() === '' ? 0 : value.trim().split(/\s+/).length;
+
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);
   };
@@ -165,8 +169,13 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
         />
       </div>
       
-      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
+      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground flex items-center justify-between">
         <p>💡 Tip: Select text and click formatting buttons, or use WhatsApp syntax (lists, quotes, inline code supported)</p>
+        <div className="flex items-center gap-3">
+          <span className="font-medium">{characterCount} characters</span>
+          <span className="text-muted-foreground/60">•</span>
+          <span className="font-medium">{wordCount} words</span>
+        </div>
       </div>
     </div>
   );
