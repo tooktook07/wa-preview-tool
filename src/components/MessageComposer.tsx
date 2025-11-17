@@ -4,7 +4,7 @@ import { RenameDraftDialog } from "./RenameDraftDialog";
 import { useReadability } from "@/hooks/use-readability";
 import { useState, useRef } from "react";
 import * as React from "react";
-import { AlertTriangle, ChevronDown, Check, MoreVertical, Pencil, Trash2, Lock } from "lucide-react";
+import { AlertTriangle, ChevronDown, Check, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,12 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import type { Draft } from "@/hooks/use-draft-manager";
 
 interface MessageComposerProps {
@@ -248,21 +242,6 @@ export default function MessageComposer({
               </DropdownMenuContent>
             </DropdownMenu>
             </div>
-
-            {/* Privacy Badge */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-md bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300">
-                    <Lock className="h-3 w-3" />
-                    <span className="text-[10px] font-medium">Local</span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-[200px]">
-                  <p className="text-xs">Your drafts are stored in your browser only. Nothing is sent to any server.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
           </div>
         </div>
       </div>
