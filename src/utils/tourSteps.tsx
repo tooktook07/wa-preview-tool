@@ -34,7 +34,8 @@ export const tourSteps: Step[] = [
         </ul>
       </div>
     ),
-    placement: 'top',
+    placement: isMobileViewport() ? 'bottom' : 'top',
+    offset: 10,
   },
   {
     target: '[data-tour="formatting-toolbar"]',
