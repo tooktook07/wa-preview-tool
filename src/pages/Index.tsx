@@ -133,22 +133,7 @@ export default function Index() {
       {/* Footer */}
       <footer className="mt-auto border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 py-4">
-          {/* Privacy Badge Section */}
-          <div className="flex items-start gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 mb-3">
-            <Shield className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-            <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold text-green-900 dark:text-green-100 mb-1">
-                100% Private & Secure
-              </h3>
-              <ul className="text-xs text-green-700 dark:text-green-300 space-y-0.5">
-                <li>• Everything runs in your browser</li>
-                <li>• No data sent to servers</li>
-                <li>• Drafts stored locally on your device</li>
-              </ul>
-            </div>
-          </div>
-          
-          {/* Features Section */}
+      {/* Features Section */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <p>
               Supports bold, italic, strikethrough, monospace, inline code, lists, quotes & RTL languages
