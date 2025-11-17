@@ -1,5 +1,6 @@
 import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
+import MessageEnhancementBar from "./MessageEnhancementBar";
 import { RenameDraftDialog } from "./RenameDraftDialog";
 import { useState, useRef } from "react";
 import * as React from "react";
@@ -12,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Draft } from "@/hooks/use-draft-manager";
+import type { FormatPreset } from "@/utils/formatPresets";
 
 interface MessageComposerProps {
   value: string;
@@ -173,6 +175,16 @@ export default function MessageComposer({
     }, 0);
   };
 
+  const handleApplyPreset = (preset: FormatPreset) => {
+    const transformed = preset.transform(value);
+    onChange(transformed);
+    
+    // Focus textarea after applying preset
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  };
+
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-3 border-b bg-muted/30">
@@ -258,6 +270,12 @@ export default function MessageComposer({
         onFormat={handleFormat}
         onClearFormat={handleClearFormat}
         onEmojiClick={() => setShowEmojiPicker(!showEmojiPicker)}
+      />
+
+      {/* Message Enhancement Bar - Presets + Readability */}
+      <MessageEnhancementBar 
+        messageText={value}
+        onApplyPreset={handleApplyPreset}
       />
       
       {showEmojiPicker && (
