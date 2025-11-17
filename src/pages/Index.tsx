@@ -10,6 +10,8 @@ import { DraftTabs } from "@/components/DraftTabs";
 import { VersionHistory } from "@/components/VersionHistory";
 import { HelpModal } from "@/components/HelpModal";
 import { Button } from "@/components/ui/button";
+import { OnboardingTour } from "@/components/OnboardingTour";
+import { useOnboarding } from "@/hooks/use-onboarding";
 
 export default function Index() {
   const { 
@@ -29,10 +31,18 @@ export default function Index() {
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   
+  const { runTour, completeTour, skipTour, restartTour } = useOnboarding();
+  
   const isRTL = useMemo(() => detectRTL(activeDraft.content), [activeDraft.content]);
 
   return (
     <div className="min-h-screen bg-background">
+      <OnboardingTour 
+        run={runTour}
+        onComplete={completeTour}
+        onSkip={skipTour}
+      />
+      
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 py-3">
@@ -52,6 +62,7 @@ export default function Index() {
                   size="sm"
                   onClick={() => setShowHelp(true)}
                   className="flex items-center gap-2"
+                  data-tour="help-button"
                 >
                   <HelpCircle className="h-4 w-4" />
                   <span className="hidden sm:inline">Help</span>
@@ -61,6 +72,7 @@ export default function Index() {
                   size="sm"
                   onClick={() => setShowVersionHistory(true)}
                   className="flex items-center gap-2"
+                  data-tour="version-history"
                 >
                   <History className="h-4 w-4" />
                   <span className="hidden sm:inline">History</span>
@@ -78,25 +90,29 @@ export default function Index() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-6">
-          <MessageComposer 
-            value={activeDraft.content} 
-            onChange={updateDraftContent} 
-            isRTL={isRTL}
-            drafts={drafts}
-            activeDraftId={activeDraft.id}
-            onSwitchDraft={switchDraft}
-            onRenameDraft={renameDraft}
-            onClearDraft={clearDraft}
-          />
-          <WhatsAppPreview 
-            message={activeDraft.content} 
-            theme={theme}
-            device={device}
-            mode={mode}
-            onThemeChange={setTheme}
-            onDeviceChange={setDevice}
-            onModeChange={setMode}
-          />
+          <div data-tour="composer">
+            <MessageComposer 
+              value={activeDraft.content} 
+              onChange={updateDraftContent} 
+              isRTL={isRTL}
+              drafts={drafts}
+              activeDraftId={activeDraft.id}
+              onSwitchDraft={switchDraft}
+              onRenameDraft={renameDraft}
+              onClearDraft={clearDraft}
+            />
+          </div>
+          <div data-tour="preview">
+            <WhatsAppPreview 
+              message={activeDraft.content} 
+              theme={theme}
+              device={device}
+              mode={mode}
+              onThemeChange={setTheme}
+              onDeviceChange={setDevice}
+              onModeChange={setMode}
+            />
+          </div>
         </div>
       </main>
       
@@ -111,6 +127,7 @@ export default function Index() {
       <HelpModal 
         open={showHelp}
         onOpenChange={setShowHelp}
+        onRestartTour={restartTour}
       />
 
       {/* Footer */}

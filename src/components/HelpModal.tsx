@@ -7,22 +7,42 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bold, Italic, Strikethrough, Code, Code2, List, ListOrdered, Quote, Sparkles, Keyboard, Lightbulb } from "lucide-react";
+import { Bold, Italic, Strikethrough, Code, Code2, List, ListOrdered, Quote, Sparkles, Keyboard, Lightbulb, PlayCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface HelpModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onRestartTour?: () => void;
 }
 
-export function HelpModal({ open, onOpenChange }: HelpModalProps) {
+export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[85vh]">
         <DialogHeader>
-          <DialogTitle>Help & Documentation</DialogTitle>
-          <DialogDescription>
-            Learn how to use WhatsApp Preview Tool effectively
-          </DialogDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <DialogTitle>Help & Documentation</DialogTitle>
+              <DialogDescription>
+                Learn how to use WhatsApp Preview Tool effectively
+              </DialogDescription>
+            </div>
+            {onRestartTour && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  onOpenChange(false);
+                  setTimeout(() => onRestartTour(), 300);
+                }}
+                className="flex items-center gap-2"
+              >
+                <PlayCircle className="h-4 w-4" />
+                Restart Tour
+              </Button>
+            )}
+          </div>
         </DialogHeader>
 
         <Tabs defaultValue="getting-started" className="w-full">
