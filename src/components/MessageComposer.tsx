@@ -78,42 +78,49 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     const editor = editorRef.current;
     if (!editor) return;
 
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
     const cursorPos = saveCursorPosition();
     if (cursorPos === null) return;
 
     const text = editor.innerText;
-    // Find selection boundaries
-    const textBeforeCursor = text.substring(0, cursorPos);
-    const lineStart = textBeforeCursor.lastIndexOf('\n') + 1;
-    const textAfterCursor = text.substring(cursorPos);
-    const lineEnd = textAfterCursor.indexOf('\n');
-    const end = lineEnd === -1 ? text.length : cursorPos + lineEnd;
     
-    const selectedText = text.substring(cursorPos, end);
-    
-    let newText: string;
-    let newCursorPos: number;
-
     // Handle list and quote prefixes
     if (format === "* " || format === "1. " || format === "> ") {
-      newText = text.substring(0, lineStart) + 
+      const textBeforeCursor = text.substring(0, cursorPos);
+      const lineStart = textBeforeCursor.lastIndexOf('\n') + 1;
+      
+      const newText = text.substring(0, lineStart) + 
                 format + 
                 text.substring(lineStart);
-      newCursorPos = cursorPos + format.length;
+      const newCursorPos = cursorPos + format.length;
+      
+      onChange(newText);
+      
+      setTimeout(() => {
+        restoreCursorPosition(newCursorPos);
+        editor.focus();
+      }, 0);
     } else {
-      // Handle inline formatting
-      newText = text.substring(0, cursorPos) + 
+      // Handle inline formatting (bold, italic, etc.)
+      const selectedText = range.toString();
+      const selectionStart = cursorPos - selectedText.length;
+      
+      // Insert format markers around selection or at cursor
+      const newText = text.substring(0, selectionStart) + 
                 format + selectedText + format + 
-                text.substring(end);
-      newCursorPos = cursorPos + format.length;
+                text.substring(cursorPos);
+      const newCursorPos = selectionStart + format.length + selectedText.length;
+      
+      onChange(newText);
+      
+      setTimeout(() => {
+        restoreCursorPosition(newCursorPos);
+        editor.focus();
+      }, 0);
     }
-    
-    onChange(newText);
-    
-    setTimeout(() => {
-      restoreCursorPosition(newCursorPos);
-      editor.focus();
-    }, 0);
   };
 
   const handleClearFormat = () => {
