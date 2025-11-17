@@ -16,17 +16,17 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-whatsapp-green text-white rounded-lg">
-              <MessageSquare className="h-6 w-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">WhatsApp Message Preview</h1>
-              <p className="text-sm text-muted-foreground">
-                Compose and preview your formatted messages in real-time
-              </p>
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-6 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <MessageSquare className="h-5 w-5 text-primary" strokeWidth={2} />
+              <div className="flex items-baseline gap-3">
+                <h1 className="text-lg font-semibold text-foreground tracking-tight">WhatsApp Preview Tool</h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  Format and preview messages in real-time
+                </p>
+              </div>
             </div>
           </div>
         </div>
