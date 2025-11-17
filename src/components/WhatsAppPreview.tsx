@@ -72,7 +72,7 @@ export default function WhatsAppPreview({
       backgroundColor: theme === "dark" ? "#0e1418" : "#d1d7db"
     }}>
         {/* Device Frame */}
-        <div className={`relative transition-all duration-300 ${isMobile ? 'w-full max-w-[375px] h-[480px] sm:h-[550px] lg:h-[600px]' : 'w-full max-w-5xl h-[480px] sm:h-[550px]'}`}>
+        <div className={`relative transition-all duration-300 ${isMobile ? 'w-full max-w-[375px] h-[600px] sm:h-[812px]' : 'w-full max-w-5xl h-[600px]'}`}>
           {isMobile ?
         // Realistic iPhone Frame
         <div className="relative w-full h-full">

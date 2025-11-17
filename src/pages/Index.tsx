@@ -88,7 +88,7 @@ export default function Index() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 lg:py-6">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <div className="grid lg:grid-cols-2 gap-4 sm:gap-6" data-tour="main-grid">
           <div data-tour="composer">
             <MessageComposer 

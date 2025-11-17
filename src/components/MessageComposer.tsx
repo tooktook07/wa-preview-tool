@@ -262,7 +262,7 @@ export default function MessageComposer({
       )}
 
       {/* Main Textarea Container */}
-      <div className="flex-1 flex flex-col relative min-h-[300px] sm:min-h-[250px] lg:min-h-[280px] max-h-[480px] bg-muted/20">
+      <div className="flex-1 flex flex-col relative min-h-[300px] bg-muted/20">
         <textarea
           ref={textareaRef}
           value={value}
