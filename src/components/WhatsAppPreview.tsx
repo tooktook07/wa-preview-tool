@@ -1,6 +1,7 @@
 import { parseWhatsAppFormatting, detectRTL, detectLineDirection } from "@/utils/formatParser";
 import { useMemo } from "react";
 import PreviewControls, { ThemeMode, DeviceMode, MessageMode } from "./PreviewControls";
+import MessageBubble from "./MessageBubble";
 
 interface WhatsAppPreviewProps {
   message: string;
@@ -138,61 +139,16 @@ export default function WhatsAppPreview({
                         }}
                       >
                         <div className="flex flex-col gap-2 max-w-full">
-                          {/* Message Bubble */}
-                          <div className={`flex ${mode === "sender" ? 'justify-end' : 'justify-start'}`}>
-                            <div 
-                              className="relative rounded-lg shadow-md transition-all duration-200 max-w-[75%]"
-                              style={{ backgroundColor: bubbleColor }}
-                            >
-                              <div 
-                                className={`absolute top-0 ${mode === "sender" ? 'right-0 -mr-2' : 'left-0 -ml-2'} w-0 h-0 
-                                  border-t-[10px]
-                                  ${mode === "sender" ? 'border-l-[10px] border-l-transparent' : 'border-r-[10px] border-r-transparent'}`}
-                                style={{ borderTopColor: bubbleColor }}
-                              />
-                              
-                              <div className="px-2.5 py-1.5">
-                                {message ? (
-                                  <div 
-                                    className="whitespace-pre-wrap break-words leading-relaxed"
-                                    style={{ color: textColor, fontSize: '14px' }}
-                                    dangerouslySetInnerHTML={{ __html: formattedMessage }}
-                                  />
-                                ) : (
-                                  <p 
-                                    className="italic text-sm"
-                                    style={{ color: theme === "dark" ? "#8696a0" : "#667781" }}
-                                  >
-                                    Your message will appear here...
-                                  </p>
-                                )}
-                                
-                                {message && (
-                                  <div className={`flex items-center gap-1 mt-1 ${isRTL ? 'justify-start' : 'justify-end'}`}>
-                                    <span 
-                                      className="text-[10px]"
-                                      style={{ color: theme === "dark" ? "#8696a0" : "#667781" }}
-                                    >
-                                      {new Date().toLocaleTimeString('en-US', { 
-                                        hour: '2-digit', 
-                                        minute: '2-digit',
-                                        hour12: false 
-                                      })}
-                                    </span>
-                                    {mode === "sender" && (
-                                      <svg 
-                                        viewBox="0 0 16 15" 
-                                        className="w-3.5 h-3.5 text-blue-500"
-                                        fill="currentColor"
-                                      >
-                                        <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/>
-                                      </svg>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
+                          <MessageBubble
+                            message={message}
+                            formattedMessage={formattedMessage}
+                            bubbleColor={bubbleColor}
+                            textColor={textColor}
+                            theme={theme}
+                            mode={mode}
+                            isRTL={isRTL}
+                            isMobile={true}
+                          />
                         </div>
                       </div>
 
@@ -270,61 +226,16 @@ export default function WhatsAppPreview({
                 }}
               >
                 <div className="flex flex-col gap-2 max-w-full">
-                  {/* Message Bubble */}
-                  <div className={`flex ${mode === "sender" ? 'justify-end' : 'justify-start'}`}>
-                    <div 
-                      className="relative rounded-lg shadow-md transition-all duration-200 max-w-[85%]"
-                      style={{ backgroundColor: bubbleColor }}
-                    >
-                      <div 
-                        className={`absolute top-0 ${mode === "sender" ? 'right-0 -mr-2' : 'left-0 -ml-2'} w-0 h-0 
-                          border-t-[10px]
-                          ${mode === "sender" ? 'border-l-[10px] border-l-transparent' : 'border-r-[10px] border-r-transparent'}`}
-                        style={{ borderTopColor: bubbleColor }}
-                      />
-                      
-                      <div className="px-3 py-2">
-                        {message ? (
-                          <div 
-                            className="whitespace-pre-wrap break-words leading-relaxed"
-                            style={{ color: textColor, fontSize: '14px' }}
-                            dangerouslySetInnerHTML={{ __html: formattedMessage }}
-                          />
-                        ) : (
-                          <p 
-                            className="italic"
-                            style={{ color: theme === "dark" ? "#8696a0" : "#667781" }}
-                          >
-                            Your message will appear here...
-                          </p>
-                        )}
-                        
-                        {message && (
-                          <div className={`flex items-center gap-1 mt-1 ${isRTL ? 'justify-start' : 'justify-end'}`}>
-                            <span 
-                              className="text-[11px]"
-                              style={{ color: theme === "dark" ? "#8696a0" : "#667781" }}
-                            >
-                              {new Date().toLocaleTimeString('en-US', { 
-                                hour: '2-digit', 
-                                minute: '2-digit',
-                                hour12: false 
-                              })}
-                            </span>
-                            {mode === "sender" && (
-                              <svg 
-                                viewBox="0 0 16 15" 
-                                className="w-4 h-4 text-blue-500"
-                                fill="currentColor"
-                              >
-                                <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/>
-                              </svg>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <MessageBubble
+                    message={message}
+                    formattedMessage={formattedMessage}
+                    bubbleColor={bubbleColor}
+                    textColor={textColor}
+                    theme={theme}
+                    mode={mode}
+                    isRTL={isRTL}
+                    isMobile={false}
+                  />
                 </div>
               </div>
 
