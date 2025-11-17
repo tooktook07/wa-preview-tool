@@ -19,12 +19,12 @@ interface HelpModalProps {
 export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[85vh]">
+      <DialogContent className="max-w-[95vw] sm:max-w-3xl max-h-[90vh] sm:max-h-[85vh]">
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
-              <DialogTitle>Help & Documentation</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-base sm:text-lg">Help & Documentation</DialogTitle>
+              <DialogDescription className="text-xs sm:text-sm">
                 Learn how to use WhatsApp Preview Tool effectively
               </DialogDescription>
             </div>
@@ -36,41 +36,45 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
                   onOpenChange(false);
                   setTimeout(() => onRestartTour(), 300);
                 }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 w-full sm:w-auto"
               >
                 <PlayCircle className="h-4 w-4" />
-                Restart Tour
+                <span className="text-xs sm:text-sm">Restart Tour</span>
               </Button>
             )}
           </div>
         </DialogHeader>
 
         <Tabs defaultValue="getting-started" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="getting-started" className="text-xs">
-              <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-              Getting Started
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
+            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-3">
+              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
+              <span className="hidden sm:inline">Getting Started</span>
+              <span className="sm:hidden">Start</span>
             </TabsTrigger>
-            <TabsTrigger value="formatting" className="text-xs">
-              <Bold className="h-3.5 w-3.5 mr-1.5" />
-              Formatting
+            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-3">
+              <Bold className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
+              <span className="hidden sm:inline">Formatting</span>
+              <span className="sm:hidden">Format</span>
             </TabsTrigger>
-            <TabsTrigger value="shortcuts" className="text-xs">
-              <Keyboard className="h-3.5 w-3.5 mr-1.5" />
-              Shortcuts
+            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-3">
+              <Keyboard className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
+              <span className="hidden sm:inline">Shortcuts</span>
+              <span className="sm:hidden">Keys</span>
             </TabsTrigger>
-            <TabsTrigger value="tips" className="text-xs">
-              <Lightbulb className="h-3.5 w-3.5 mr-1.5" />
-              Tips & Tricks
+            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-3">
+              <Lightbulb className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
+              <span className="hidden sm:inline">Tips & Tricks</span>
+              <span className="sm:hidden">Tips</span>
             </TabsTrigger>
           </TabsList>
 
-          <ScrollArea className="h-[500px] mt-4">
+          <ScrollArea className="h-[50vh] sm:h-[500px] mt-4">
             {/* Getting Started Tab */}
-            <TabsContent value="getting-started" className="space-y-4 pr-4">
+            <TabsContent value="getting-started" className="space-y-3 sm:space-y-4 pr-2 sm:pr-4">
               <div>
-                <h3 className="font-semibold text-base mb-2">Welcome to WhatsApp Preview Tool</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <h3 className="font-semibold text-sm sm:text-base mb-2">Welcome to WhatsApp Preview Tool</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-4">
                   This tool helps you format and preview WhatsApp messages before sending them. 
                   See exactly how your message will look on different devices and themes.
                 </p>

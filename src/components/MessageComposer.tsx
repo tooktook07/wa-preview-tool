@@ -177,23 +177,23 @@ export default function MessageComposer({
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
-      <div className="p-3 border-b bg-muted/30">
-        <div className="flex items-start justify-between gap-4">
+      <div className="p-2 sm:p-3 border-b bg-muted/30">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
           {/* Left Column: Title + Description */}
           <div className="flex flex-col">
-            <h2 className="text-sm font-medium text-foreground">Message Composer</h2>
-            <p className="text-xs text-muted-foreground">Type your message and apply formatting</p>
+            <h2 className="text-sm sm:text-base font-semibold text-foreground">Message Composer</h2>
+            <p className="text-xs text-muted-foreground hidden sm:block">Type or paste your WhatsApp message</p>
           </div>
           
           {/* Right Column: Draft Controls (Grouped Buttons) */}
-          <div className="flex items-center gap-0 border rounded-md overflow-hidden" data-tour="draft-switcher">
+          <div className="flex items-center gap-0 border rounded-md overflow-hidden w-full sm:w-auto" data-tour="draft-switcher">
             {/* Draft Switcher Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-7 gap-1.5 text-xs px-3 rounded-none border-r hover:bg-accent/50">
-                  <span className="font-medium">{activeDraft.name}</span>
-                  {activeDraft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
-                  <ChevronDown className="h-3 w-3 opacity-50" />
+                <Button variant="ghost" size="sm" className="flex-1 sm:flex-initial h-7 gap-1 sm:gap-1.5 text-xs px-2 sm:px-3 rounded-none border-r hover:bg-accent/50 justify-between">
+                  <span className="font-medium truncate max-w-[120px] sm:max-w-[150px]">{activeDraft.name}</span>
+                  {activeDraft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />}
+                  <ChevronDown className="h-3 w-3 opacity-50 flex-shrink-0" />
                 </Button>
               </DropdownMenuTrigger>
               
@@ -273,13 +273,13 @@ export default function MessageComposer({
           value={value}
           onChange={handleInput}
           onPaste={handlePaste}
-          placeholder="Type your WhatsApp message here... Use formatting buttons above or type markers like *bold*, _italic_, ~strikethrough~"
-          className="flex-1 w-full p-4 bg-transparent border-none outline-none resize-none font-sans text-sm leading-relaxed text-foreground placeholder:text-muted-foreground"
+          placeholder="Type your WhatsApp message here..."
+          className="flex-1 w-full p-3 sm:p-4 bg-transparent border-none outline-none resize-none font-sans text-sm sm:text-base leading-relaxed text-foreground placeholder:text-muted-foreground"
         />
         
         {/* Character & Word Count Overlay */}
-        <div className="absolute bottom-3 right-3 px-2.5 py-1.5 bg-background/80 backdrop-blur-sm border rounded-md shadow-sm">
-          <div className="flex items-center gap-3 text-xs">
+        <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-background/80 backdrop-blur-sm border rounded-md shadow-sm">
+          <div className="flex items-center gap-1.5 sm:gap-3 text-[10px] sm:text-xs">
             <span className={getCounterColor()}>
               {characterCount} chars
             </span>
@@ -288,8 +288,7 @@ export default function MessageComposer({
             </span>
             {showWarning && (
               <div className="flex items-center gap-1 text-amber-600">
-                <AlertTriangle className="h-3.5 w-3.5" />
-                {showSplitSuggestion && <span className="text-xs">Split suggested</span>}
+                <AlertTriangle className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
               </div>
             )}
           </div>

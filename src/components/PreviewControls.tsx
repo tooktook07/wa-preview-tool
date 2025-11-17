@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, Monitor, Smartphone, Send, UserCircle } from "lucide-react";
+import { Sun, Moon, Monitor, Smartphone, Send, UserCircle, Settings, Check } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export type ThemeMode = "light" | "dark";
 export type DeviceMode = "mobile" | "desktop";
@@ -23,6 +25,62 @@ export default function PreviewControls({
   onDeviceChange,
   onModeChange,
 }: PreviewControlsProps) {
+  const isMobile = useIsMobile();
+  
+  // Mobile dropdown layout
+  if (isMobile) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="h-7 gap-1 text-xs">
+            <Settings className="h-3.5 w-3.5" />
+            <span>View</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuLabel className="text-xs">Theme</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => onThemeChange("light")}>
+            <Sun className="h-3.5 w-3.5 mr-2" />
+            Light
+            {theme === "light" && <Check className="h-3.5 w-3.5 ml-auto" />}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onThemeChange("dark")}>
+            <Moon className="h-3.5 w-3.5 mr-2" />
+            Dark
+            {theme === "dark" && <Check className="h-3.5 w-3.5 ml-auto" />}
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-xs">Device</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => onDeviceChange("mobile")}>
+            <Smartphone className="h-3.5 w-3.5 mr-2" />
+            Mobile
+            {device === "mobile" && <Check className="h-3.5 w-3.5 ml-auto" />}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onDeviceChange("desktop")}>
+            <Monitor className="h-3.5 w-3.5 mr-2" />
+            Desktop
+            {device === "desktop" && <Check className="h-3.5 w-3.5 ml-auto" />}
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-xs">Perspective</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => onModeChange("sender")}>
+            <Send className="h-3.5 w-3.5 mr-2" />
+            Sender
+            {mode === "sender" && <Check className="h-3.5 w-3.5 ml-auto" />}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onModeChange("receiver")}>
+            <UserCircle className="h-3.5 w-3.5 mr-2" />
+            Receiver
+            {mode === "receiver" && <Check className="h-3.5 w-3.5 ml-auto" />}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+  
+  // Desktop layout
   return (
     <div className="flex items-center gap-2">
       {/* Theme Toggle */}

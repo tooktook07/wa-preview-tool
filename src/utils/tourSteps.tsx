@@ -1,12 +1,19 @@
 import { Step } from 'react-joyride';
 
+const isMobileViewport = () => window.innerWidth < 768;
+
 export const tourSteps: Step[] = [
   {
     target: 'body',
     content: (
       <div>
-        <h2 className="text-lg font-bold mb-2">Welcome to WhatsApp Preview Tool! 👋</h2>
-        <p>Let's take a quick tour to help you get started with all the powerful features.</p>
+        <h2 className={`font-bold mb-2 ${isMobileViewport() ? 'text-base' : 'text-lg'}`}>Welcome to WhatsApp Preview Tool! 👋</h2>
+        <p className={isMobileViewport() ? 'text-xs' : 'text-sm'}>
+          {isMobileViewport() 
+            ? "Quick tour of key features"
+            : "Let's take a quick tour to help you get started with all the powerful features."
+          }
+        </p>
       </div>
     ),
     placement: 'center',
