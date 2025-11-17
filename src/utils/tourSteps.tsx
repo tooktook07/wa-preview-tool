@@ -34,7 +34,7 @@ export const tourSteps: Step[] = [
         </ul>
       </div>
     ),
-    placement: isMobileViewport() ? 'bottom' : 'top',
+    placement: 'top',
     offset: 10,
   },
   {
