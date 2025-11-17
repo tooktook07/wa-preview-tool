@@ -46,33 +46,46 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
         </DialogHeader>
 
         <Tabs defaultValue="getting-started" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 h-auto">
-            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Getting Started</span>
-              <span className="inline sm:hidden whitespace-nowrap">Start</span>
-            </TabsTrigger>
-            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Bold className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Formatting</span>
-              <span className="inline sm:hidden whitespace-nowrap">Format</span>
-            </TabsTrigger>
-            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Keyboard className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Shortcuts</span>
-              <span className="inline sm:hidden whitespace-nowrap">Keys</span>
-            </TabsTrigger>
-            <TabsTrigger value="privacy" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Shield className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Privacy</span>
-              <span className="inline sm:hidden whitespace-nowrap">🔒</span>
-            </TabsTrigger>
-            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Lightbulb className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Tips & Tricks</span>
-              <span className="inline sm:hidden whitespace-nowrap">Tips</span>
-            </TabsTrigger>
-          </TabsList>
+          {/* Horizontal scrollable tabs on mobile, grid on desktop */}
+          <div className="overflow-x-auto overflow-y-hidden scrollbar-hide -mx-2 px-2 sm:mx-0 sm:px-0 sm:overflow-visible scroll-smooth snap-x snap-mandatory">
+            <TabsList className="inline-flex sm:grid w-auto sm:w-full sm:grid-cols-5 gap-1 h-auto min-w-full sm:min-w-0">
+              <TabsTrigger 
+                value="getting-started" 
+                className="flex-shrink-0 text-xs px-3 sm:px-2 h-auto py-2 snap-start"
+              >
+                <Sparkles className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Getting Started</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="formatting" 
+                className="flex-shrink-0 text-xs px-3 sm:px-2 h-auto py-2 snap-start"
+              >
+                <Bold className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Formatting</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="shortcuts" 
+                className="flex-shrink-0 text-xs px-3 sm:px-2 h-auto py-2 snap-start"
+              >
+                <Keyboard className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Shortcuts</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="privacy" 
+                className="flex-shrink-0 text-xs px-3 sm:px-2 h-auto py-2 snap-start"
+              >
+                <Shield className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Privacy & Data</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="tips" 
+                className="flex-shrink-0 text-xs px-3 sm:px-2 h-auto py-2 snap-start"
+              >
+                <Lightbulb className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Tips & Tricks</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <ScrollArea className="h-[50vh] sm:h-[500px] mt-4">
             {/* Getting Started Tab */}
