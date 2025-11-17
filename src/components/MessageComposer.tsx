@@ -190,14 +190,7 @@ export default function MessageComposer({
                   className="flex-1 sm:flex-initial h-9 gap-1 sm:gap-1.5 px-2 sm:px-2.5 justify-between text-xs font-medium hover:bg-muted/50 border-r rounded-none"
                 >
                   <span className="truncate max-w-[100px] sm:max-w-[120px]">{activeDraft.name}</span>
-                  <div className="flex items-center gap-1 sm:gap-1.5 text-muted-foreground">
-                    {activeDraft.content.length > 0 && (
-                      <span className="text-[10px] bg-primary/10 text-primary px-1 sm:px-1.5 py-0.5 rounded">
-                        {activeDraft.content.length}
-                      </span>
-                    )}
-                    <ChevronDown className="h-3.5 w-3.5" />
-                  </div>
+                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
                 </Button>
               </DropdownMenuTrigger>
 
