@@ -183,13 +183,13 @@ export default function MessageComposer({
             <p className="text-xs text-muted-foreground">Type your message and apply formatting</p>
           </div>
           
-          {/* Right Column: Draft Dropdown + Three Dots */}
-          <div className="flex items-center gap-2">
+          {/* Right Column: Draft Controls (Grouped Buttons) */}
+          <div className="flex items-center gap-0 border rounded-md overflow-hidden">
             {/* Draft Switcher Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs px-2">
-                  📝 {activeDraft.name}
+                <Button variant="ghost" size="sm" className="h-7 gap-1.5 text-xs px-3 rounded-none border-r hover:bg-accent/50">
+                  <span className="font-medium">{activeDraft.name}</span>
                   {activeDraft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
@@ -215,7 +215,7 @@ export default function MessageComposer({
             {/* Draft Options Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-7 w-7">
+                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-none hover:bg-accent/50">
                   <MoreVertical className="h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
