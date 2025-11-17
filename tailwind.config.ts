@@ -47,6 +47,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        whatsapp: {
+          green: "hsl(var(--whatsapp-green))",
+          bubble: "hsl(var(--whatsapp-bubble))",
+          bg: "hsl(var(--whatsapp-bg))",
+          text: "hsl(var(--whatsapp-text))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
