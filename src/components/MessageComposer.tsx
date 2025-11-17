@@ -2,6 +2,7 @@ import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
 import { useState, useRef } from "react";
 import * as React from "react";
+import { AlertTriangle } from "lucide-react";
 
 interface MessageComposerProps {
   value: string;
@@ -16,6 +17,16 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
   // Calculate character and word count
   const characterCount = value.length;
   const wordCount = value.trim() === '' ? 0 : value.trim().split(/\s+/).length;
+  
+  // Determine counter color based on WhatsApp limits (~4000 chars practical limit)
+  const getCounterColor = () => {
+    if (characterCount >= 4000) return "text-destructive";
+    if (characterCount >= 3500) return "text-amber-500";
+    return "text-muted-foreground";
+  };
+  
+  const showWarning = characterCount >= 3500;
+  const showSplitSuggestion = characterCount >= 4000;
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);
@@ -167,10 +178,18 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           dir="auto"
           placeholder="Type your message here..."
         />
-        <div className="absolute bottom-6 right-6 flex items-center gap-2 text-xs text-muted-foreground bg-background/80 backdrop-blur-sm px-2 py-1 rounded border border-border/50">
-          <span className="font-medium">{characterCount}</span>
-          <span className="text-muted-foreground/60">•</span>
-          <span className="font-medium">{wordCount} words</span>
+        <div className="absolute bottom-6 right-6 flex flex-col items-end gap-2">
+          <div className={`flex items-center gap-2 text-xs bg-background/80 backdrop-blur-sm px-2 py-1 rounded border border-border/50 ${getCounterColor()}`}>
+            {showWarning && <AlertTriangle className="w-3 h-3" />}
+            <span className="font-medium">{characterCount}</span>
+            <span className="text-muted-foreground/60">•</span>
+            <span className="font-medium">{wordCount} words</span>
+          </div>
+          {showSplitSuggestion && (
+            <div className="text-xs bg-destructive/10 backdrop-blur-sm px-2 py-1 rounded border border-destructive/20 text-destructive">
+              Message is long - consider splitting into multiple messages
+            </div>
+          )}
         </div>
       </div>
       
