@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
-import { MessageSquare, History, HelpCircle } from "lucide-react";
+import { MessageSquare, History, HelpCircle, Shield } from "lucide-react";
 import { ThemeMode, DeviceMode, MessageMode } from "@/components/PreviewControls";
 import { detectRTL } from "@/utils/formatParser";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -47,12 +47,12 @@ export default function Index() {
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-3 sm:px-6 py-2 sm:py-3">
           <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                 <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" strokeWidth={2} />
                 <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 min-w-0">
                   <h1 className="text-sm sm:text-lg font-semibold text-foreground tracking-tight truncate">WhatsApp Preview Tool</h1>
                   <p className="text-[10px] sm:text-xs text-muted-foreground hidden md:block">
-                    Format and preview messages in real-time
+                    Private message formatting - everything stays on your device
                   </p>
                 </div>
               </div>
@@ -133,6 +133,22 @@ export default function Index() {
       {/* Footer */}
       <footer className="mt-auto border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 py-4">
+          {/* Privacy Badge Section */}
+          <div className="flex items-start gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 mb-3">
+            <Shield className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-semibold text-green-900 dark:text-green-100 mb-1">
+                100% Private & Secure
+              </h3>
+              <ul className="text-xs text-green-700 dark:text-green-300 space-y-0.5">
+                <li>• Everything runs in your browser</li>
+                <li>• No data sent to servers</li>
+                <li>• Drafts stored locally on your device</li>
+              </ul>
+            </div>
+          </div>
+          
+          {/* Features Section */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <p>
               Supports bold, italic, strikethrough, monospace, inline code, lists, quotes & RTL languages
