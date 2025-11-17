@@ -156,7 +156,7 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
         </div>
       )}
       
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 relative">
         <textarea
           ref={textareaRef}
           value={value}
@@ -167,15 +167,15 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           dir="auto"
           placeholder="Type your message here..."
         />
-      </div>
-      
-      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground flex items-center justify-between">
-        <p>💡 Tip: Select text and click formatting buttons, or use WhatsApp syntax (lists, quotes, inline code supported)</p>
-        <div className="flex items-center gap-3">
-          <span className="font-medium">{characterCount} characters</span>
+        <div className="absolute bottom-6 right-6 flex items-center gap-2 text-xs text-muted-foreground bg-background/80 backdrop-blur-sm px-2 py-1 rounded border border-border/50">
+          <span className="font-medium">{characterCount}</span>
           <span className="text-muted-foreground/60">•</span>
           <span className="font-medium">{wordCount} words</span>
         </div>
+      </div>
+      
+      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
+        <p>💡 Tip: Select text and click formatting buttons, or use WhatsApp syntax (lists, quotes, inline code supported)</p>
       </div>
     </div>
   );
