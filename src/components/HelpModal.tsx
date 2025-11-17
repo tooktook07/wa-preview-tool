@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bold, Italic, Strikethrough, Code, Code2, List, ListOrdered, Quote, Sparkles, Keyboard, Lightbulb, PlayCircle, Shield, CheckCircle, Database, WifiOff, UserX, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
 
 interface HelpModalProps {
   open: boolean;
@@ -17,6 +19,16 @@ interface HelpModalProps {
 }
 
 export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps) {
+  const [activeTab, setActiveTab] = useState("getting-started");
+
+  const tabOptions = [
+    { value: "getting-started", label: "Getting Started", icon: Sparkles },
+    { value: "formatting", label: "Formatting", icon: Bold },
+    { value: "shortcuts", label: "Shortcuts", icon: Keyboard },
+    { value: "privacy", label: "Privacy", icon: Shield },
+    { value: "tips", label: "Tips & Tricks", icon: Lightbulb },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] sm:max-w-3xl max-h-[90vh] sm:max-h-[85vh]">
@@ -45,32 +57,52 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
           </div>
         </DialogHeader>
 
-        <Tabs defaultValue="getting-started" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 h-auto">
-            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Getting Started</span>
-              <span className="inline sm:hidden whitespace-nowrap">Start</span>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {/* Mobile Dropdown */}
+          <div className="sm:hidden mb-4">
+            <Select value={activeTab} onValueChange={setActiveTab}>
+              <SelectTrigger className="w-full">
+                <SelectValue>
+                  {tabOptions.find(tab => tab.value === activeTab)?.label}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {tabOptions.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <SelectItem key={tab.value} value={tab.value}>
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-4 w-4" />
+                        <span>{tab.label}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Desktop Tabs */}
+          <TabsList className="hidden sm:grid w-full grid-cols-5 gap-1 h-auto">
+            <TabsTrigger value="getting-started" className="text-xs px-2 h-auto py-2">
+              <Sparkles className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+              <span className="whitespace-nowrap">Getting Started</span>
             </TabsTrigger>
-            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Bold className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Formatting</span>
-              <span className="inline sm:hidden whitespace-nowrap">Format</span>
+            <TabsTrigger value="formatting" className="text-xs px-2 h-auto py-2">
+              <Bold className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+              <span className="whitespace-nowrap">Formatting</span>
             </TabsTrigger>
-            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Keyboard className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Shortcuts</span>
-              <span className="inline sm:hidden whitespace-nowrap">Keys</span>
+            <TabsTrigger value="shortcuts" className="text-xs px-2 h-auto py-2">
+              <Keyboard className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+              <span className="whitespace-nowrap">Shortcuts</span>
             </TabsTrigger>
-            <TabsTrigger value="privacy" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Shield className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Privacy</span>
-              <span className="inline sm:hidden whitespace-nowrap">🔒</span>
+            <TabsTrigger value="privacy" className="text-xs px-2 h-auto py-2">
+              <Shield className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+              <span className="whitespace-nowrap">Privacy</span>
             </TabsTrigger>
-            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
-              <Lightbulb className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Tips & Tricks</span>
-              <span className="inline sm:hidden whitespace-nowrap">Tips</span>
+            <TabsTrigger value="tips" className="text-xs px-2 h-auto py-2">
+              <Lightbulb className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
+              <span className="whitespace-nowrap">Tips & Tricks</span>
             </TabsTrigger>
           </TabsList>
 
