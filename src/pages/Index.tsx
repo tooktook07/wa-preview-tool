@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
-import { MessageSquare, History, HelpCircle, Shield } from "lucide-react";
+import { MessageSquare, History, HelpCircle, Shield, Lock } from "lucide-react";
 import { ThemeMode, DeviceMode, MessageMode } from "@/components/PreviewControls";
 import { detectRTL } from "@/utils/formatParser";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -135,8 +135,9 @@ export default function Index() {
         <div className="container mx-auto px-6 py-4">
       {/* Features Section */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <p>
-              100% private & secure - All processing happens locally in your browser with zero data collection
+            <p className="flex items-center gap-1.5">
+              <Shield className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+              <span>100% private & secure - All processing happens locally in your browser with zero data collection</span>
             </p>
             <p className="opacity-70">
               Made with ❤️ - Free forever, no tracking, no BS
