@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Bold, Italic, Strikethrough, Code, Smile } from "lucide-react";
+import { Bold, Italic, Strikethrough, Code, Smile, Eraser } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FormattingToolbarProps {
   onFormat: (format: string) => void;
+  onClearFormat: () => void;
   onEmojiClick: () => void;
 }
 
-export default function FormattingToolbar({ onFormat, onEmojiClick }: FormattingToolbarProps) {
+export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClick }: FormattingToolbarProps) {
   const formatButtons = [
     { icon: Bold, label: "Bold", format: "*" },
     { icon: Italic, label: "Italic", format: "_" },
@@ -34,6 +35,23 @@ export default function FormattingToolbar({ onFormat, onEmojiClick }: Formatting
           </TooltipContent>
         </Tooltip>
       ))}
+      
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClearFormat}
+            className="h-8 w-8 p-0"
+          >
+            <Eraser className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Clear Format</p>
+        </TooltipContent>
+      </Tooltip>
+      
       <div className="ml-auto">
         <Tooltip>
           <TooltipTrigger asChild>
