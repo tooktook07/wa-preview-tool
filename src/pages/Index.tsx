@@ -139,7 +139,7 @@ export default function Index() {
               100% private & secure - All processing happens locally in your browser with zero data collection
             </p>
             <p className="opacity-70">
-              Made with WhatsApp formatting syntax
+              Made with ❤️ - Free forever, no tracking, no BS
             </p>
           </div>
         </div>
