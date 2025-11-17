@@ -133,15 +133,24 @@ export default function Index() {
       {/* Footer */}
       <footer className="mt-auto border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 py-4">
-      {/* Features Section */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <p>
-              Supports bold, italic, strikethrough, monospace, inline code, lists, quotes & RTL languages
-            </p>
-            <p className="opacity-70">
-              Made with WhatsApp formatting syntax
-            </p>
-          </div>
+      {/* Privacy & Security Section */}
+      <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border/50 mb-3">
+        <Shield className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5" />
+        <div className="flex-1 min-w-0">
+          <h3 className="text-xs font-semibold text-foreground mb-1">
+            100% Private & Secure
+          </h3>
+          <ul className="text-[11px] text-muted-foreground space-y-0.5">
+            <li>• Everything runs in your browser - no servers involved</li>
+            <li>• Your drafts and history are stored locally on your device</li>
+            <li>• Zero data collection, tracking, or external transmission</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div className="text-center text-[11px] text-muted-foreground opacity-70">
+        <p>Made with WhatsApp formatting syntax</p>
+      </div>
         </div>
       </footer>
     </div>
