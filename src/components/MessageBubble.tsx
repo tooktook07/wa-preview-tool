@@ -30,12 +30,19 @@ export default function MessageBubble({
         className={`relative rounded-lg shadow-md transition-all duration-200 ${isMobile ? 'max-w-[75%]' : 'max-w-[85%]'}`}
         style={{ backgroundColor: bubbleColor }}
       >
-        <div 
-          className={`absolute top-0 ${mode === "sender" ? 'right-0 -mr-2' : 'left-0 -ml-2'} w-0 h-0 
-            border-t-[10px]
-            ${mode === "sender" ? 'border-l-[10px] border-l-transparent' : 'border-r-[10px] border-r-transparent'}`}
-          style={{ borderTopColor: bubbleColor }}
-        />
+        {/* WhatsApp-style curved tail */}
+        <svg
+          viewBox="0 0 8 13"
+          className={`absolute top-0 ${mode === "sender" ? '-right-[7px]' : '-left-[7px]'} w-2 h-3`}
+          style={{ fill: bubbleColor }}
+        >
+          {mode === "sender" ? (
+            <path d="M1.533,3.568L8.009,0.235C8.009,0.235,7.762,5.188,7.762,6.034c0,0.846,0.246,5.799,0.246,5.799L1.533,8.5 C1.533,8.5,3.579,6.548,3.579,6.034S1.533,3.568,1.533,3.568z" />
+          ) : (
+            <path d="M6.467,3.568L-0.009,0.235C-0.009,0.235,0.238,5.188,0.238,6.034c0,0.846-0.246,5.799-0.246,5.799L6.467,8.5 C6.467,8.5,4.421,6.548,4.421,6.034S6.467,3.568,6.467,3.568z" />
+          )}
+        </svg>
+        
         
         <div className={padding}>
           {message ? (
