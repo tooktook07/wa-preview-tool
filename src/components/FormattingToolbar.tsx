@@ -144,6 +144,7 @@ export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClic
               variant="ghost" 
               size="sm" 
               className={`h-7 gap-1 text-xs px-2.5 ${getScoreColor()} hover:bg-accent/50`}
+              data-tour="readability-score"
             >
               {getScoreIcon()}
               <span className="font-medium">{readabilityMetrics.fleschScore}</span>

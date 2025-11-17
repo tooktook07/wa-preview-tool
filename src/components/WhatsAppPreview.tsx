@@ -63,7 +63,9 @@ export default function WhatsAppPreview({
           <h2 className="text-base font-semibold text-foreground">WhatsApp Preview</h2>
           <p className="text-xs text-muted-foreground">Live preview of your message</p>
         </div>
-        <PreviewControls theme={theme} device={device} mode={mode} onThemeChange={onThemeChange} onDeviceChange={onDeviceChange} onModeChange={onModeChange} />
+        <div data-tour="preview-controls">
+          <PreviewControls theme={theme} device={device} mode={mode} onThemeChange={onThemeChange} onDeviceChange={onDeviceChange} onModeChange={onModeChange} />
+        </div>
       </div>
       
       <div className="flex-1 p-6 flex items-center justify-center" style={{

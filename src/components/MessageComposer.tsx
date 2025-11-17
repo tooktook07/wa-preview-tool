@@ -186,7 +186,7 @@ export default function MessageComposer({
           </div>
           
           {/* Right Column: Draft Controls (Grouped Buttons) */}
-          <div className="flex items-center gap-0 border rounded-md overflow-hidden">
+          <div className="flex items-center gap-0 border rounded-md overflow-hidden" data-tour="draft-switcher">
             {/* Draft Switcher Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -217,25 +217,28 @@ export default function MessageComposer({
             {/* Draft Options Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-none hover:bg-accent/50">
+                <Button variant="ghost" size="sm" className="h-7 px-2 rounded-none hover:bg-accent/50">
                   <MoreVertical className="h-3.5 w-3.5" />
                 </Button>
               </DropdownMenuTrigger>
               
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-44">
                 <DropdownMenuItem onClick={() => setRenamingDraft(activeDraft)}>
-                  <Pencil className="mr-2 h-4 w-4" />
+                  <Pencil className="mr-2 h-3.5 w-3.5" />
                   Rename Draft
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => {
-                    if (confirm(`Clear all content from "${activeDraft.name}"?`)) {
-                      onClearDraft(activeDraftId);
+                    if (activeDraft.content || activeDraft.versions.length > 0) {
+                      if (window.confirm(`Clear "${activeDraft.name}"? This will delete all content and versions.`)) {
+                        onClearDraft(activeDraft.id);
+                      }
                     }
                   }}
+                  disabled={!activeDraft.content && activeDraft.versions.length === 0}
                   className="text-destructive focus:text-destructive"
                 >
-                  <Trash2 className="mr-2 h-4 w-4" />
+                  <Trash2 className="mr-2 h-3.5 w-3.5" />
                   Clear Draft
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -243,61 +246,75 @@ export default function MessageComposer({
           </div>
         </div>
       </div>
-      
+
+      {/* Formatting Toolbar */}
+      <div data-tour="formatting-toolbar">
+        <FormattingToolbar
+          onFormat={handleFormat}
+          onClearFormat={handleClearFormat}
+          onEmojiClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          readabilityMetrics={metrics}
+        />
+      </div>
+
+      {/* Emoji Picker */}
+      {showEmojiPicker && (
+        <div className="border-b">
+          <EmojiPicker 
+            onEmojiSelect={handleEmojiSelect}
+          />
+        </div>
+      )}
+
+      {/* Main Textarea Container */}
+      <div className="flex-1 flex flex-col relative min-h-0 bg-muted/20">
+        <textarea
+          ref={textareaRef}
+          value={value}
+          onChange={handleInput}
+          onPaste={handlePaste}
+          placeholder="Type your WhatsApp message here... Use formatting buttons above or type markers like *bold*, _italic_, ~strikethrough~"
+          className="flex-1 w-full p-4 bg-transparent border-none outline-none resize-none font-sans text-sm leading-relaxed text-foreground placeholder:text-muted-foreground"
+        />
+        
+        {/* Character & Word Count Overlay */}
+        <div className="absolute bottom-3 right-3 px-2.5 py-1.5 bg-background/80 backdrop-blur-sm border rounded-md shadow-sm">
+          <div className="flex items-center gap-3 text-xs">
+            <span className={getCounterColor()}>
+              {characterCount} chars
+            </span>
+            <span className="text-muted-foreground">
+              {wordCount} words
+            </span>
+            {showWarning && (
+              <div className="flex items-center gap-1 text-amber-600">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                {showSplitSuggestion && <span className="text-xs">Split suggested</span>}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Tip */}
+      <div className="px-4 py-2 border-t bg-muted/30">
+        <p className="text-xs text-muted-foreground text-center">
+          💡 Tip: Select text and click formatting buttons, or type markers directly (*bold*, _italic_, ~strikethrough~)
+        </p>
+      </div>
+
+      {/* Rename Draft Dialog */}
       {renamingDraft && (
-        <RenameDraftDialog 
-          draft={renamingDraft}
+        <RenameDraftDialog
           open={!!renamingDraft}
           onOpenChange={(open) => !open && setRenamingDraft(null)}
+          draft={renamingDraft}
           onRename={(newName) => {
             onRenameDraft(renamingDraft.id, newName);
             setRenamingDraft(null);
           }}
         />
       )}
-      
-      <FormattingToolbar 
-        onFormat={handleFormat}
-        onClearFormat={handleClearFormat}
-        onEmojiClick={() => setShowEmojiPicker(!showEmojiPicker)}
-        readabilityMetrics={metrics}
-      />
-      
-      {showEmojiPicker && (
-        <div className="border-b">
-          <EmojiPicker onEmojiSelect={handleEmojiSelect} />
-        </div>
-      )}
-      
-      <div className="flex-1 p-4 relative">
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onChange={handleInput}
-          onPaste={handlePaste}
-          className="h-full min-h-[300px] w-full rounded-md border border-input bg-muted/20 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none font-sans"
-          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
-          dir="auto"
-          placeholder="Type your message here..."
-        />
-        <div className="absolute bottom-6 right-6 flex flex-col items-end gap-2">
-          <div className={`flex items-center gap-2 text-xs bg-background/80 backdrop-blur-sm px-2 py-1 rounded border border-border/50 ${getCounterColor()}`}>
-            {showWarning && <AlertTriangle className="w-3 h-3" />}
-            <span className="font-medium">{characterCount}</span>
-            <span className="text-muted-foreground/60">•</span>
-            <span className="font-medium">{wordCount} words</span>
-          </div>
-          {showSplitSuggestion && (
-            <div className="text-xs bg-destructive/10 backdrop-blur-sm px-2 py-1 rounded border border-destructive/20 text-destructive">
-              Message is long - consider splitting into multiple messages
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
-        <p>💡 Tip: Select text and click formatting buttons, or use WhatsApp syntax (lists, quotes, inline code supported)</p>
-      </div>
     </div>
   );
 }
