@@ -146,8 +146,8 @@ export default function WhatsAppPreview({
                               <div className="px-2.5 py-1.5">
                                 {message ? (
                                   <div 
-                                    className="whitespace-pre-wrap break-words leading-relaxed text-sm"
-                                    style={{ color: textColor }}
+                                    className="whitespace-pre-wrap break-words leading-relaxed"
+                                    style={{ color: textColor, fontSize: '14px' }}
                                     dangerouslySetInnerHTML={{ __html: formattedMessage }}
                                   />
                                 ) : (
@@ -277,7 +277,7 @@ export default function WhatsAppPreview({
                         {message ? (
                           <div 
                             className="whitespace-pre-wrap break-words leading-relaxed"
-                            style={{ color: textColor }}
+                            style={{ color: textColor, fontSize: '14px' }}
                             dangerouslySetInnerHTML={{ __html: formattedMessage }}
                           />
                         ) : (
