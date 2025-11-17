@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
 import { MessageSquare } from "lucide-react";
-import { ThemeMode, DeviceMode } from "@/components/PreviewControls";
+import { ThemeMode, DeviceMode, MessageMode } from "@/components/PreviewControls";
 import { detectRTL } from "@/utils/formatParser";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
@@ -10,6 +10,7 @@ export default function Index() {
   const [message, setMessage] = useLocalStorage("whatsapp-message-draft", "");
   const [theme, setTheme] = useLocalStorage<ThemeMode>("whatsapp-preview-theme", "light");
   const [device, setDevice] = useLocalStorage<DeviceMode>("whatsapp-preview-device", "desktop");
+  const [mode, setMode] = useLocalStorage<MessageMode>("whatsapp-message-mode", "sender");
   
   const isRTL = useMemo(() => detectRTL(message), [message]);
 
@@ -37,11 +38,13 @@ export default function Index() {
         <div className="grid lg:grid-cols-2 gap-6">
           <MessageComposer value={message} onChange={setMessage} isRTL={isRTL} />
           <WhatsAppPreview 
-            message={message}
+            message={message} 
             theme={theme}
             device={device}
+            mode={mode}
             onThemeChange={setTheme}
             onDeviceChange={setDevice}
+            onModeChange={setMode}
           />
         </div>
       </main>
