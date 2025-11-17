@@ -133,8 +133,8 @@ export default function Index() {
       {/* Footer */}
       <footer className="mt-auto border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 py-4">
-          {/* Privacy Badge Section */}
-          <div className="flex items-start gap-2.5 p-2.5 rounded-md bg-muted/30 border border-border/50 mb-3">
+          {/* Privacy Section */}
+          <div className="flex items-start gap-2.5 p-2.5 rounded-md bg-muted/30 border border-border/50">
             <Shield className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0 mt-0.5 opacity-60" />
             <div className="flex-1 min-w-0">
               <h3 className="text-xs font-medium text-foreground mb-1 opacity-90">
@@ -146,16 +146,6 @@ export default function Index() {
                 <li>• Stored on your device only</li>
               </ul>
             </div>
-          </div>
-          
-          {/* Features Section */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-            <p>
-              Supports bold, italic, strikethrough, monospace, inline code, lists, quotes & RTL languages
-            </p>
-            <p className="opacity-70">
-              Made with WhatsApp formatting syntax
-            </p>
           </div>
         </div>
       </footer>
