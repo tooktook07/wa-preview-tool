@@ -33,6 +33,16 @@ export default function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
           </Button>
         ))}
       </div>
+      <div className="mt-3 pt-3 border-t border-border text-center">
+        <a 
+          href="https://emojidb.org/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
+        >
+          Explore more emojis
+        </a>
+      </div>
     </div>
   );
 }
