@@ -6,9 +6,10 @@ import { useState, useRef } from "react";
 interface MessageComposerProps {
   value: string;
   onChange: (value: string) => void;
+  isRTL?: boolean;
 }
 
-export default function MessageComposer({ value, onChange }: MessageComposerProps) {
+export default function MessageComposer({ value, onChange, isRTL = false }: MessageComposerProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -118,6 +119,8 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           onChange={(e) => onChange(e.target.value)}
           placeholder="Type your message here... Use *bold*, _italic_, ~strikethrough~, or ```monospace```"
           className="h-full min-h-[300px] resize-none font-sans"
+          dir={isRTL ? 'rtl' : 'ltr'}
+          style={{ textAlign: isRTL ? 'right' : 'left' }}
         />
       </div>
       

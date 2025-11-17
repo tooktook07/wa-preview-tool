@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
 import { MessageSquare } from "lucide-react";
 import { ThemeMode, DeviceMode } from "@/components/PreviewControls";
+import { detectRTL } from "@/utils/formatParser";
 
 export default function Index() {
   const [message, setMessage] = useState("");
   const [theme, setTheme] = useState<ThemeMode>("light");
   const [device, setDevice] = useState<DeviceMode>("desktop");
+  
+  const isRTL = useMemo(() => detectRTL(message), [message]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,7 +34,7 @@ export default function Index() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-6">
-          <MessageComposer value={message} onChange={setMessage} />
+          <MessageComposer value={message} onChange={setMessage} isRTL={isRTL} />
           <WhatsAppPreview 
             message={message}
             theme={theme}
