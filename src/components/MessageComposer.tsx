@@ -1,18 +1,43 @@
 import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
+import { RenameDraftDialog } from "./RenameDraftDialog";
 import { useState, useRef } from "react";
 import * as React from "react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ChevronDown, Check, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import type { Draft } from "@/hooks/use-draft-manager";
 
 interface MessageComposerProps {
   value: string;
   onChange: (value: string) => void;
   isRTL?: boolean;
+  drafts: Draft[];
+  activeDraftId: string;
+  onSwitchDraft: (draftId: string) => void;
+  onRenameDraft: (draftId: string, newName: string) => void;
+  onClearDraft: (draftId: string) => void;
 }
 
-export default function MessageComposer({ value, onChange }: MessageComposerProps) {
+export default function MessageComposer({ 
+  value, 
+  onChange, 
+  drafts, 
+  activeDraftId, 
+  onSwitchDraft, 
+  onRenameDraft, 
+  onClearDraft 
+}: MessageComposerProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [renamingDraft, setRenamingDraft] = useState<Draft | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  
+  const activeDraft = drafts.find(d => d.id === activeDraftId)!;
 
   // Calculate character and word count
   const characterCount = value.length;
@@ -151,9 +176,79 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-3 border-b bg-muted/30">
-        <h2 className="text-base font-semibold text-foreground">Message Composer</h2>
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-medium text-foreground">Message Composer</h2>
+            
+            {/* Draft Switcher Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-6 gap-1 text-xs px-2">
+                  📝 {activeDraft.name}
+                  {activeDraft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              
+              <DropdownMenuContent align="start" className="w-48">
+                {drafts.map((draft) => (
+                  <DropdownMenuItem 
+                    key={draft.id}
+                    onClick={() => onSwitchDraft(draft.id)}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-2">
+                      {draft.id === activeDraftId && <Check className="h-3 w-3" />}
+                      {draft.name}
+                    </span>
+                    {draft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          
+          {/* Draft Options Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-6 w-6">
+                <MoreVertical className="h-3.5 w-3.5" />
+              </Button>
+            </DropdownMenuTrigger>
+            
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setRenamingDraft(activeDraft)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Rename Draft
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => {
+                  if (confirm(`Clear all content from "${activeDraft.name}"?`)) {
+                    onClearDraft(activeDraftId);
+                  }
+                }}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Clear Draft
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <p className="text-xs text-muted-foreground">Type your message and apply formatting</p>
       </div>
+      
+      {renamingDraft && (
+        <RenameDraftDialog 
+          draft={renamingDraft}
+          open={!!renamingDraft}
+          onOpenChange={(open) => !open && setRenamingDraft(null)}
+          onRename={(newName) => {
+            onRenameDraft(renamingDraft.id, newName);
+            setRenamingDraft(null);
+          }}
+        />
+      )}
       
       <FormattingToolbar 
         onFormat={handleFormat}
