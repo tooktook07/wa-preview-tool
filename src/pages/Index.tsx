@@ -64,18 +64,17 @@ export default function Index() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <DraftTabs 
+        <div className="grid lg:grid-cols-2 gap-6">
+          <MessageComposer 
+            value={activeDraft.content} 
+            onChange={updateDraftContent} 
+            isRTL={isRTL}
             drafts={drafts}
             activeDraftId={activeDraft.id}
-            onSwitch={switchDraft}
-            onRename={renameDraft}
-            onClear={clearDraft}
+            onSwitchDraft={switchDraft}
+            onRenameDraft={renameDraft}
+            onClearDraft={clearDraft}
           />
-        </div>
-        
-        <div className="grid lg:grid-cols-2 gap-6">
-          <MessageComposer value={activeDraft.content} onChange={updateDraftContent} isRTL={isRTL} />
           <WhatsAppPreview 
             message={activeDraft.content} 
             theme={theme}
