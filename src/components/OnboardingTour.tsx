@@ -1,5 +1,6 @@
 import Joyride, { CallBackProps, STATUS, EVENTS, ACTIONS } from 'react-joyride';
 import { tourSteps } from '@/utils/tourSteps';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface OnboardingTourProps {
   run: boolean;
@@ -8,6 +9,8 @@ interface OnboardingTourProps {
 }
 
 export function OnboardingTour({ run, onComplete, onSkip }: OnboardingTourProps) {
+  const isMobile = useIsMobile();
+  
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status, action, type } = data;
 
@@ -36,7 +39,7 @@ export function OnboardingTour({ run, onComplete, onSkip }: OnboardingTourProps)
       disableOverlayClose
       disableCloseOnEsc={false}
       scrollToFirstStep
-      scrollOffset={100}
+      scrollOffset={isMobile ? 50 : 100}
       callback={handleJoyrideCallback}
       styles={{
         options: {
@@ -48,25 +51,26 @@ export function OnboardingTour({ run, onComplete, onSkip }: OnboardingTourProps)
           zIndex: 10000,
         },
         tooltip: {
-          fontSize: 14,
-          padding: 20,
+          fontSize: isMobile ? 12 : 14,
+          padding: isMobile ? 12 : 20,
+          maxWidth: isMobile ? '90vw' : 420,
         },
         tooltipContainer: {
           textAlign: 'left',
         },
         buttonNext: {
           backgroundColor: 'hsl(var(--primary))',
-          fontSize: 14,
-          padding: '8px 16px',
+          fontSize: isMobile ? 12 : 14,
+          padding: isMobile ? '6px 12px' : '8px 16px',
         },
         buttonBack: {
           color: 'hsl(var(--muted-foreground))',
-          fontSize: 14,
-          marginRight: 8,
+          fontSize: isMobile ? 12 : 14,
+          marginRight: isMobile ? 4 : 8,
         },
         buttonSkip: {
           color: 'hsl(var(--muted-foreground))',
-          fontSize: 13,
+          fontSize: isMobile ? 11 : 13,
         },
       }}
       locale={{
@@ -74,7 +78,7 @@ export function OnboardingTour({ run, onComplete, onSkip }: OnboardingTourProps)
         close: 'Close',
         last: 'Finish',
         next: 'Next',
-        skip: 'Skip tour',
+        skip: isMobile ? 'Skip' : 'Skip tour',
       }}
     />
   );

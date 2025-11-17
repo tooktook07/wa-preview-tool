@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Bold, Italic, Strikethrough, Code, Code2, Smile, Eraser, List, ListOrdered, Quote, AlertCircle, CheckCircle2, BarChart3 } from "lucide-react";
+import { Bold, Italic, Strikethrough, Code, Code2, Smile, Eraser, List, ListOrdered, Quote, AlertCircle, CheckCircle2, BarChart3, MoreHorizontal } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import ReadabilityPanel from "./ReadabilityPanel";
 import type { ReadabilityMetrics } from "@/utils/readabilityAnalyzer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FormattingToolbarProps {
   onFormat: (format: string) => void;
@@ -13,6 +15,8 @@ interface FormattingToolbarProps {
 }
 
 export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClick, readabilityMetrics }: FormattingToolbarProps) {
+  const isMobile = useIsMobile();
+  
   const formatButtons = [
     { icon: Bold, label: "Bold", format: "*" },
     { icon: Italic, label: "Italic", format: "_" },
@@ -50,6 +54,100 @@ export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClic
     readabilityMetrics.longSentenceIndexes.length > 0
   );
 
+  // Mobile layout with dropdown
+  if (isMobile) {
+    return (
+      <div className="flex items-center gap-1 px-2 py-1.5 border-b bg-card overflow-x-auto">
+        {/* Essential buttons */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm" onClick={() => onFormat("*")} className="h-7 w-7 p-0 flex-shrink-0">
+              <Bold className="h-3.5 w-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent><p>Bold</p></TooltipContent>
+        </Tooltip>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm" onClick={() => onFormat("_")} className="h-7 w-7 p-0 flex-shrink-0">
+              <Italic className="h-3.5 w-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent><p>Italic</p></TooltipContent>
+        </Tooltip>
+        
+        {/* More dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 flex-shrink-0">
+              <MoreHorizontal className="h-3.5 w-3.5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => onFormat("~")}>
+              <Strikethrough className="h-4 w-4 mr-2" />
+              Strikethrough
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onFormat("`")}>
+              <Code2 className="h-4 w-4 mr-2" />
+              Inline Code
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onFormat("```")}>
+              <Code className="h-4 w-4 mr-2" />
+              Monospace
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleListFormat("* ")}>
+              <List className="h-4 w-4 mr-2" />
+              Bulleted List
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleListFormat("1. ")}>
+              <ListOrdered className="h-4 w-4 mr-2" />
+              Numbered List
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleListFormat("> ")}>
+              <Quote className="h-4 w-4 mr-2" />
+              Quote
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={onClearFormat}>
+              <Eraser className="h-4 w-4 mr-2" />
+              Clear Format
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="sm" onClick={onEmojiClick} className="h-7 w-7 p-0 flex-shrink-0">
+              <Smile className="h-3.5 w-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent><p>Emoji</p></TooltipContent>
+        </Tooltip>
+        
+        <div className="flex-1" />
+        
+        {/* Readability score */}
+        {readabilityMetrics && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="sm" className={`h-7 gap-1 text-xs px-2 flex-shrink-0 ${getScoreColor()}`} data-tour="readability-score">
+                {getScoreIcon()}
+                <span className="font-medium">{readabilityMetrics.fleschScore}</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent side="bottom" align="end" className="w-80">
+              <ReadabilityPanel metrics={readabilityMetrics} />
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+    );
+  }
+
+  // Desktop layout
   return (
     <div className="flex items-center gap-2 px-3 py-1.5 border-b bg-card">
       {/* Group 1: Text Formatting */}

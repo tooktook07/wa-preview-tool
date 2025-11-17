@@ -45,39 +45,39 @@ export default function Index() {
       
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-6 py-3">
-          <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <MessageSquare className="h-5 w-5 text-primary" strokeWidth={2} />
-                <div className="flex items-baseline gap-3">
-                  <h1 className="text-lg font-semibold text-foreground tracking-tight">WhatsApp Preview Tool</h1>
-                  <p className="text-xs text-muted-foreground hidden sm:block">
+        <div className="container mx-auto px-3 sm:px-6 py-2 sm:py-3">
+          <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" strokeWidth={2} />
+                <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 min-w-0">
+                  <h1 className="text-sm sm:text-lg font-semibold text-foreground tracking-tight truncate">WhatsApp Preview Tool</h1>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground hidden md:block">
                     Format and preview messages in real-time
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowHelp(true)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2 h-7 sm:h-8 px-2 sm:px-3"
                   data-tour="help-button"
                 >
-                  <HelpCircle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Help</span>
+                  <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline text-xs sm:text-sm">Help</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowVersionHistory(true)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-1 sm:gap-2 h-7 sm:h-8 px-2 sm:px-3"
                   data-tour="version-history"
                 >
-                  <History className="h-4 w-4" />
-                  <span className="hidden sm:inline">History</span>
+                  <History className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline text-xs sm:text-sm">History</span>
                   {activeDraft.versions.length > 0 && (
-                    <span className="ml-1 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                    <span className="ml-0.5 sm:ml-1 text-[10px] sm:text-xs bg-primary/10 text-primary px-1 sm:px-1.5 py-0.5 rounded">
                       {activeDraft.versions.length}
                     </span>
                   )}
@@ -88,8 +88,8 @@ export default function Index() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-2 gap-6">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
           <div data-tour="composer">
             <MessageComposer 
               value={activeDraft.content} 
