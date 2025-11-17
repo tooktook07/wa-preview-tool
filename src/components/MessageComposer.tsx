@@ -1,7 +1,7 @@
 import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
-import MessageEnhancementBar from "./MessageEnhancementBar";
 import { RenameDraftDialog } from "./RenameDraftDialog";
+import { useReadability } from "@/hooks/use-readability";
 import { useState, useRef } from "react";
 import * as React from "react";
 import { AlertTriangle, ChevronDown, Check, MoreVertical, Pencil, Trash2 } from "lucide-react";
@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Draft } from "@/hooks/use-draft-manager";
-import type { FormatPreset } from "@/utils/formatPresets";
 
 interface MessageComposerProps {
   value: string;
@@ -38,6 +37,7 @@ export default function MessageComposer({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [renamingDraft, setRenamingDraft] = useState<Draft | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { metrics } = useReadability(value);
   
   const activeDraft = drafts.find(d => d.id === activeDraftId)!;
 
@@ -175,16 +175,6 @@ export default function MessageComposer({
     }, 0);
   };
 
-  const handleApplyPreset = (preset: FormatPreset) => {
-    const transformed = preset.transform(value);
-    onChange(transformed);
-    
-    // Focus textarea after applying preset
-    setTimeout(() => {
-      textareaRef.current?.focus();
-    }, 0);
-  };
-
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-3 border-b bg-muted/30">
@@ -270,12 +260,7 @@ export default function MessageComposer({
         onFormat={handleFormat}
         onClearFormat={handleClearFormat}
         onEmojiClick={() => setShowEmojiPicker(!showEmojiPicker)}
-      />
-
-      {/* Message Enhancement Bar - Presets + Readability */}
-      <MessageEnhancementBar 
-        messageText={value}
-        onApplyPreset={handleApplyPreset}
+        readabilityMetrics={metrics}
       />
       
       {showEmojiPicker && (
