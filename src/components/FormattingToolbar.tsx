@@ -57,92 +57,96 @@ export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClic
   // Mobile layout with dropdown
   if (isMobile) {
     return (
-      <div className="flex items-center gap-1 px-2 py-1.5 border-b bg-card overflow-x-auto">
-        {/* Essential buttons */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="sm" onClick={() => onFormat("*")} className="h-7 w-7 p-0 flex-shrink-0">
-              <Bold className="h-3.5 w-3.5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent><p>Bold</p></TooltipContent>
-        </Tooltip>
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="sm" onClick={() => onFormat("_")} className="h-7 w-7 p-0 flex-shrink-0">
-              <Italic className="h-3.5 w-3.5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent><p>Italic</p></TooltipContent>
-        </Tooltip>
-        
-        {/* More dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 flex-shrink-0">
-              <MoreHorizontal className="h-3.5 w-3.5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={() => onFormat("~")}>
-              <Strikethrough className="h-4 w-4 mr-2" />
-              Strikethrough
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onFormat("`")}>
-              <Code2 className="h-4 w-4 mr-2" />
-              Inline Code
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onFormat("```")}>
-              <Code className="h-4 w-4 mr-2" />
-              Monospace
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleListFormat("* ")}>
-              <List className="h-4 w-4 mr-2" />
-              Bulleted List
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleListFormat("1. ")}>
-              <ListOrdered className="h-4 w-4 mr-2" />
-              Numbered List
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleListFormat("> ")}>
-              <Quote className="h-4 w-4 mr-2" />
-              Quote
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onClearFormat}>
-              <Eraser className="h-4 w-4 mr-2" />
-              Clear Format
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="sm" onClick={onEmojiClick} className="h-7 w-7 p-0 flex-shrink-0">
-              <Smile className="h-3.5 w-3.5" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent><p>Emoji</p></TooltipContent>
-        </Tooltip>
-        
-        <div className="flex-1" />
-        
-        {/* Readability score */}
-        {readabilityMetrics && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="sm" className={`h-7 gap-1 text-xs px-2 flex-shrink-0 ${getScoreColor()}`} data-tour="readability-score">
-                {getScoreIcon()}
-                <span className="font-medium">{readabilityMetrics.fleschScore}</span>
+      <div className="relative">
+        <div className="flex items-center gap-1 px-2 py-1.5 border-b bg-card overflow-x-auto scrollbar-hide scroll-smooth">
+          {/* Essential buttons */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm" onClick={() => onFormat("*")} className="h-9 w-9 p-0 flex-shrink-0">
+                <Bold className="h-4 w-4" />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent side="bottom" align="end" className="w-80">
-              <ReadabilityPanel metrics={readabilityMetrics} />
-            </PopoverContent>
-          </Popover>
-        )}
+            </TooltipTrigger>
+            <TooltipContent><p>Bold</p></TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm" onClick={() => onFormat("_")} className="h-9 w-9 p-0 flex-shrink-0">
+                <Italic className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent><p>Italic</p></TooltipContent>
+          </Tooltip>
+          
+          {/* More dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="h-9 w-9 p-0 flex-shrink-0">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem onClick={() => onFormat("~")}>
+                <Strikethrough className="h-4 w-4 mr-2" />
+                Strikethrough
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onFormat("`")}>
+                <Code2 className="h-4 w-4 mr-2" />
+                Inline Code
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onFormat("```")}>
+                <Code className="h-4 w-4 mr-2" />
+                Monospace
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleListFormat("* ")}>
+                <List className="h-4 w-4 mr-2" />
+                Bulleted List
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleListFormat("1. ")}>
+                <ListOrdered className="h-4 w-4 mr-2" />
+                Numbered List
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleListFormat("> ")}>
+                <Quote className="h-4 w-4 mr-2" />
+                Quote
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onClearFormat}>
+                <Eraser className="h-4 w-4 mr-2" />
+                Clear Format
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm" onClick={onEmojiClick} className="h-9 w-9 p-0 flex-shrink-0">
+                <Smile className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent><p>Emoji</p></TooltipContent>
+          </Tooltip>
+          
+          <div className="flex-1" />
+          
+          {/* Readability score */}
+          {readabilityMetrics && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="sm" className={`h-9 gap-1 text-xs px-2 flex-shrink-0 ${getScoreColor()}`} data-tour="readability-score">
+                  {getScoreIcon()}
+                  <span className="font-medium">{readabilityMetrics.fleschScore}</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent side="bottom" align="end" className="w-80">
+                <ReadabilityPanel metrics={readabilityMetrics} />
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+        {/* Fade indicator on right edge */}
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-card to-transparent pointer-events-none sm:hidden" />
       </div>
     );
   }
