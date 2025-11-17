@@ -61,9 +61,12 @@ export function parseWhatsAppFormatting(text: string): string {
       return `<div ${dirAttr} style="display: flex; gap: 8px; margin: 2px 0; ${direction === 'rtl' ? 'flex-direction: row-reverse;' : ''} text-align: ${textAlign};"><span style="min-width: 20px;">•</span><span>${line.substring(2)}</span></div>`;
     }
     
-    // Regular line with direction
+    // Regular line with direction - preserve empty lines
+    if (line === '') {
+      return '<br>';
+    }
     return `<span ${dirAttr} style="display: block; text-align: ${textAlign};">${line}</span>`;
-  }).join('\n');
+  }).join('');
 
   // Inline code (single backtick - before monospace)
   formatted = formatted.replace(/`([^`]+)`/g, '<code style="background-color: rgba(128, 128, 128, 0.15); padding: 2px 4px; border-radius: 3px; font-family: monospace; font-size: 0.95em;">$1</code>');
@@ -84,8 +87,8 @@ export function parseWhatsAppFormatting(text: string): string {
   // Strikethrough (~text~)
   formatted = formatted.replace(/~(.+?)~/g, '<del>$1</del>');
 
-  // Convert newlines to <br> tags
-  formatted = formatted.replace(/\n/g, '<br>');
+  // Note: newlines are already handled in line processing above
+  // No need for additional replace here
 
   return formatted;
 }
