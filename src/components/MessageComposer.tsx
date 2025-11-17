@@ -1,7 +1,8 @@
 import { Textarea } from "@/components/ui/textarea";
 import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { detectLineDirection } from "@/utils/formatParser";
 
 interface MessageComposerProps {
   value: string;
@@ -11,7 +12,31 @@ interface MessageComposerProps {
 
 export default function MessageComposer({ value, onChange, isRTL = false }: MessageComposerProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [currentLineDir, setCurrentLineDir] = useState<'rtl' | 'ltr'>('ltr');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+
+  // Detect direction of current line based on cursor position
+  useEffect(() => {
+    const updateDirection = () => {
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      const cursorPos = textarea.selectionStart;
+      const textBeforeCursor = value.substring(0, cursorPos);
+      const currentLineStart = textBeforeCursor.lastIndexOf('\n') + 1;
+      const textAfterLineStart = value.substring(currentLineStart);
+      const currentLineEnd = textAfterLineStart.indexOf('\n');
+      const currentLine = currentLineEnd === -1 
+        ? textAfterLineStart 
+        : textAfterLineStart.substring(0, currentLineEnd);
+
+      const direction = detectLineDirection(currentLine);
+      setCurrentLineDir(direction);
+    };
+
+    updateDirection();
+  }, [value]);
 
   const handleFormat = (format: string) => {
     const textarea = textareaRef.current;
@@ -132,8 +157,8 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
           onChange={(e) => onChange(e.target.value)}
           placeholder="Type your message here... Use *bold*, _italic_, ~strikethrough~, ```monospace```, `inline code`, > quote, * list, or 1. numbered list"
           className="h-full min-h-[300px] resize-none font-sans"
-          dir={isRTL ? 'rtl' : 'ltr'}
-          style={{ textAlign: isRTL ? 'right' : 'left' }}
+          dir={currentLineDir}
+          style={{ textAlign: currentLineDir === 'rtl' ? 'right' : 'left' }}
         />
       </div>
       
