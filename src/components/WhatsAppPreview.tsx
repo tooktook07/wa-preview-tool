@@ -41,13 +41,10 @@ export default function WhatsAppPreview({
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
-      <div 
-        className="p-3 border-b flex items-center justify-between"
-        style={{ backgroundColor: theme === "dark" ? "#202c33" : "#008069", color: "#ffffff" }}
-      >
+      <div className="p-3 border-b bg-muted/50 flex items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold">WhatsApp Preview</h2>
-          <p className="text-xs opacity-90">Live preview of your formatted message</p>
+          <h2 className="text-base font-semibold text-foreground">WhatsApp Preview</h2>
+          <p className="text-xs text-muted-foreground">Live preview of your formatted message</p>
         </div>
         <PreviewControls
           theme={theme}
