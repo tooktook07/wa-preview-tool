@@ -82,10 +82,16 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    const cursorPos = textarea.selectionStart;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
     
-    // Remove all formatting markers
-    const cleanedText = value
+    // If no text is selected, do nothing
+    if (start === end) return;
+    
+    const selectedText = value.substring(start, end);
+    
+    // Remove all formatting markers from selected text only
+    const cleanedText = selectedText
       .replace(/\*\*\*/g, '')
       .replace(/\*\*/g, '')
       .replace(/\*/g, '')
@@ -97,11 +103,13 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
       .replace(/^\d+\.\s/gm, '')
       .replace(/^>\s/gm, '');
     
-    onChange(cleanedText);
+    // Reconstruct the full text with cleaned selection
+    const newText = value.substring(0, start) + cleanedText + value.substring(end);
+    onChange(newText);
     
     setTimeout(() => {
-      // Adjust cursor position based on removed characters
-      const newCursorPos = Math.min(cursorPos, cleanedText.length);
+      // Place cursor at the end of the cleaned text
+      const newCursorPos = start + cleanedText.length;
       textarea.setSelectionRange(newCursorPos, newCursorPos);
       textarea.focus();
     }, 0);
