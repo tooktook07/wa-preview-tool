@@ -162,7 +162,7 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           value={value}
           onChange={handleInput}
           onPaste={handlePaste}
-          className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none font-sans"
+          className="h-full min-h-[300px] w-full rounded-md border border-input bg-muted/20 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none font-sans"
           style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
           dir="auto"
           placeholder="Type your message here..."
