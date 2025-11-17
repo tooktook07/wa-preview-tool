@@ -46,26 +46,26 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
         </DialogHeader>
 
         <Tabs defaultValue="getting-started" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1">
-            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-3">
-              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
-              <span className="hidden sm:inline">Getting Started</span>
-              <span className="sm:hidden">Start</span>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1 h-auto">
+            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+              <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">Getting Started</span>
+              <span className="inline sm:hidden whitespace-nowrap">Start</span>
             </TabsTrigger>
-            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-3">
-              <Bold className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
-              <span className="hidden sm:inline">Formatting</span>
-              <span className="sm:hidden">Format</span>
+            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+              <Bold className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">Formatting</span>
+              <span className="inline sm:hidden whitespace-nowrap">Format</span>
             </TabsTrigger>
-            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-3">
-              <Keyboard className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
-              <span className="hidden sm:inline">Shortcuts</span>
-              <span className="sm:hidden">Keys</span>
+            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+              <Keyboard className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">Shortcuts</span>
+              <span className="inline sm:hidden whitespace-nowrap">Keys</span>
             </TabsTrigger>
-            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-3">
-              <Lightbulb className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
-              <span className="hidden sm:inline">Tips & Tricks</span>
-              <span className="sm:hidden">Tips</span>
+            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+              <Lightbulb className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">Tips & Tricks</span>
+              <span className="inline sm:hidden whitespace-nowrap">Tips</span>
             </TabsTrigger>
           </TabsList>
 
