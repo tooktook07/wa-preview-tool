@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bold, Italic, Strikethrough, Code, Smile, Eraser } from "lucide-react";
+import { Bold, Italic, Strikethrough, Code, Code2, Smile, Eraser, List, ListOrdered, Quote } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FormattingToolbarProps {
@@ -13,8 +13,19 @@ export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClic
     { icon: Bold, label: "Bold", format: "*" },
     { icon: Italic, label: "Italic", format: "_" },
     { icon: Strikethrough, label: "Strikethrough", format: "~" },
+    { icon: Code2, label: "Inline Code", format: "`" },
     { icon: Code, label: "Monospace", format: "```" },
   ];
+
+  const listButtons = [
+    { icon: List, label: "Bulleted List", prefix: "* " },
+    { icon: ListOrdered, label: "Numbered List", prefix: "1. " },
+    { icon: Quote, label: "Quote", prefix: "> " },
+  ];
+
+  const handleListFormat = (prefix: string) => {
+    onFormat(prefix);
+  };
 
   return (
     <div className="flex items-center gap-1 p-2 border-b bg-card">
@@ -35,6 +46,28 @@ export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClic
           </TooltipContent>
         </Tooltip>
       ))}
+      
+      <div className="w-px h-6 bg-border mx-1" />
+
+      {listButtons.map(({ icon: Icon, label, prefix }) => (
+        <Tooltip key={label}>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleListFormat(prefix)}
+              className="h-8 w-8 p-0"
+            >
+              <Icon className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{label}</p>
+          </TooltipContent>
+        </Tooltip>
+      ))}
+      
+      <div className="w-px h-6 bg-border mx-1" />
       
       <Tooltip>
         <TooltipTrigger asChild>

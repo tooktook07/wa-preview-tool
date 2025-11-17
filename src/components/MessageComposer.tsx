@@ -22,14 +22,24 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
     const selectedText = value.substring(start, end);
     
     let newText: string;
-    if (format === "```") {
-      newText = value.substring(0, start) + 
-                format + selectedText + format + 
-                value.substring(end);
+    let newCursorPos: number;
+
+    // Handle list and quote prefixes (add to beginning of line)
+    if (format === "* " || format === "1. " || format === "> ") {
+      // Find the start of the current line
+      const beforeCursor = value.substring(0, start);
+      const lineStart = beforeCursor.lastIndexOf('\n') + 1;
+      
+      newText = value.substring(0, lineStart) + 
+                format + 
+                value.substring(lineStart);
+      newCursorPos = start + format.length;
     } else {
+      // Handle inline formatting (wrap selected text)
       newText = value.substring(0, start) + 
                 format + selectedText + format + 
                 value.substring(end);
+      newCursorPos = end + format.length * 2;
     }
     
     onChange(newText);
@@ -37,7 +47,6 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
     // Restore focus and selection
     setTimeout(() => {
       textarea.focus();
-      const newCursorPos = end + format.length * 2;
       textarea.setSelectionRange(newCursorPos, newCursorPos);
     }, 0);
   };
@@ -57,7 +66,11 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
       .replace(/\*/g, '')     // Bold (single asterisk)
       .replace(/_/g, '')      // Italic
       .replace(/~/g, '')      // Strikethrough
-      .replace(/```/g, '');   // Monospace
+      .replace(/```/g, '')    // Monospace
+      .replace(/`/g, '')      // Inline code
+      .replace(/^[*-]\s/gm, '') // Bulleted lists
+      .replace(/^\d+\.\s/gm, '') // Numbered lists
+      .replace(/^>\s/gm, ''); // Quotes
     
     const newText = value.substring(0, start) + 
                     cleanedText + 
@@ -117,7 +130,7 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
           ref={textareaRef}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Type your message here... Use *bold*, _italic_, ~strikethrough~, or ```monospace```"
+          placeholder="Type your message here... Use *bold*, _italic_, ~strikethrough~, ```monospace```, `inline code`, > quote, * list, or 1. numbered list"
           className="h-full min-h-[300px] resize-none font-sans"
           dir={isRTL ? 'rtl' : 'ltr'}
           style={{ textAlign: isRTL ? 'right' : 'left' }}
@@ -125,7 +138,7 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
       </div>
       
       <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
-        <p>💡 Tip: Select text and click formatting buttons, or use markdown-style syntax</p>
+        <p>💡 Tip: Select text and click formatting buttons, or use WhatsApp syntax (lists, quotes, inline code supported)</p>
       </div>
     </div>
   );
