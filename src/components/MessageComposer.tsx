@@ -282,14 +282,14 @@ export default function MessageComposer({
       )}
 
       {/* Main Textarea Container */}
-      <div className="flex-1 flex flex-col relative min-h-0 bg-muted/20">
+      <div className="flex-1 flex flex-col relative min-h-[300px] sm:min-h-0 bg-muted/20">
         <textarea
           ref={textareaRef}
           value={value}
           onChange={handleInput}
           onPaste={handlePaste}
           placeholder="Type your WhatsApp message here..."
-          className="flex-1 w-full p-3 sm:p-4 bg-transparent border-none outline-none resize-none font-sans text-sm sm:text-base leading-relaxed text-foreground placeholder:text-muted-foreground"
+          className="flex-1 w-full p-3 sm:p-4 bg-transparent border-none outline-none resize-none font-sans text-sm leading-relaxed text-foreground placeholder:text-muted-foreground"
         />
         
         {/* Character & Word Count Overlay */}
