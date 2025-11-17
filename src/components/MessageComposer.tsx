@@ -41,6 +41,36 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     }, 0);
   };
 
+  const handleClearFormat = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = value.substring(start, end);
+    
+    // Remove all formatting markers
+    const cleanedText = selectedText
+      .replace(/\*\*\*/g, '') // Bold italic
+      .replace(/\*\*/g, '')   // Bold (double asterisk)
+      .replace(/\*/g, '')     // Bold (single asterisk)
+      .replace(/_/g, '')      // Italic
+      .replace(/~/g, '')      // Strikethrough
+      .replace(/```/g, '');   // Monospace
+    
+    const newText = value.substring(0, start) + 
+                    cleanedText + 
+                    value.substring(end);
+    
+    onChange(newText);
+    
+    setTimeout(() => {
+      textarea.focus();
+      const newCursorPos = start + cleanedText.length;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
+
   const handleEmojiSelect = (emoji: string) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -71,6 +101,7 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
       
       <FormattingToolbar 
         onFormat={handleFormat}
+        onClearFormat={handleClearFormat}
         onEmojiClick={() => setShowEmojiPicker(!showEmojiPicker)}
       />
       
