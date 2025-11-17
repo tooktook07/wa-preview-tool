@@ -1,7 +1,10 @@
 import { parseWhatsAppFormatting, detectRTL, detectLineDirection } from "@/utils/formatParser";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import PreviewControls, { ThemeMode, DeviceMode, MessageMode } from "./PreviewControls";
 import MessageBubble from "./MessageBubble";
+import { Button } from "@/components/ui/button";
+import { Copy, Check } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 interface WhatsAppPreviewProps {
   message: string;
   theme: ThemeMode;
@@ -20,10 +23,30 @@ export default function WhatsAppPreview({
   onDeviceChange,
   onModeChange
 }: WhatsAppPreviewProps) {
+  const [copied, setCopied] = useState(false);
+
   // Detect if message has any RTL content (for overall layout comfort)
   const isRTL = useMemo(() => detectRTL(message), [message]);
   // Format message with per-line direction detection
   const formattedMessage = useMemo(() => parseWhatsAppFormatting(message), [message]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message);
+      setCopied(true);
+      toast({
+        title: "Copied to clipboard!",
+        description: "Message with formatting markers copied successfully.",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast({
+        title: "Failed to copy",
+        description: "Could not copy message to clipboard.",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Theme-specific colors
   const bgColor = theme === "dark" ? "#0b141a" : "#efeae2";
@@ -219,8 +242,19 @@ export default function WhatsAppPreview({
         </div>
       </div>
       
-      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
-        {isRTL ? <p>🌍 RTL language detected - Text alignment adjusted</p> : <p>✨ Preview updates in real-time as you type</p>}
+      <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground flex items-center justify-between">
+        <div>
+          {isRTL ? <p>🌍 RTL language detected - Text alignment adjusted</p> : <p>✨ Preview updates in real-time as you type</p>}
+        </div>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          onClick={handleCopy}
+          className="h-7 px-2 gap-1.5"
+        >
+          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+          <span className="text-xs">{copied ? 'Copied!' : 'Copy'}</span>
+        </Button>
       </div>
     </div>;
 }
