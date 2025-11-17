@@ -289,8 +289,7 @@ export default function MessageComposer({
           onChange={handleInput}
           onPaste={handlePaste}
           placeholder="Type your WhatsApp message here..."
-          className="flex-1 w-full p-3 sm:p-4 bg-transparent border-none outline-none resize-none font-sans leading-relaxed text-foreground placeholder:text-muted-foreground"
-          style={{ fontSize: '14px' }}
+          className="composer-textarea flex-1 w-full p-3 sm:p-4 bg-transparent border-none outline-none resize-none font-sans leading-relaxed text-foreground placeholder:text-muted-foreground"
         />
         
         {/* Character & Word Count Overlay */}
