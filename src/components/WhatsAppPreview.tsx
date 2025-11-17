@@ -271,15 +271,15 @@ export default function WhatsAppPreview({
               >
                 <div className="flex flex-col gap-2 max-w-full">
                   {/* Message Bubble */}
-                  <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'}`}>
+                  <div className={`flex ${mode === "sender" ? 'justify-end' : 'justify-start'}`}>
                     <div 
                       className="relative rounded-lg shadow-md transition-all duration-200 max-w-[85%]"
                       style={{ backgroundColor: bubbleColor }}
                     >
                       <div 
-                        className={`absolute top-0 ${isRTL ? 'left-0 -ml-2' : 'right-0 -mr-2'} w-0 h-0 
+                        className={`absolute top-0 ${mode === "sender" ? 'right-0 -mr-2' : 'left-0 -ml-2'} w-0 h-0 
                           border-t-[10px]
-                          ${isRTL ? 'border-r-[10px] border-r-transparent' : 'border-l-[10px] border-l-transparent'}`}
+                          ${mode === "sender" ? 'border-l-[10px] border-l-transparent' : 'border-r-[10px] border-r-transparent'}`}
                         style={{ borderTopColor: bubbleColor }}
                       />
                       
