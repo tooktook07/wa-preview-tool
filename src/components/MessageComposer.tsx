@@ -1,7 +1,6 @@
-import { Textarea } from "@/components/ui/textarea";
 import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { detectLineDirection } from "@/utils/formatParser";
 
 interface MessageComposerProps {
@@ -10,125 +9,185 @@ interface MessageComposerProps {
   isRTL?: boolean;
 }
 
-export default function MessageComposer({ value, onChange, isRTL = false }: MessageComposerProps) {
+export default function MessageComposer({ value, onChange }: MessageComposerProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [currentLineDir, setCurrentLineDir] = useState<'rtl' | 'ltr'>('ltr');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
 
 
-  // Detect direction of current line based on cursor position
-  useEffect(() => {
-    const updateDirection = () => {
-      const textarea = textareaRef.current;
-      if (!textarea) return;
+  // Save and restore cursor position
+  const saveCursorPosition = () => {
+    const selection = window.getSelection();
+    if (!selection || !editorRef.current) return null;
+    
+    const range = selection.getRangeAt(0);
+    const preSelectionRange = range.cloneRange();
+    preSelectionRange.selectNodeContents(editorRef.current);
+    preSelectionRange.setEnd(range.startContainer, range.startOffset);
+    return preSelectionRange.toString().length;
+  };
 
-      const cursorPos = textarea.selectionStart;
-      const textBeforeCursor = value.substring(0, cursorPos);
-      const currentLineStart = textBeforeCursor.lastIndexOf('\n') + 1;
-      const textAfterLineStart = value.substring(currentLineStart);
-      const currentLineEnd = textAfterLineStart.indexOf('\n');
-      const currentLine = currentLineEnd === -1 
-        ? textAfterLineStart 
-        : textAfterLineStart.substring(0, currentLineEnd);
+  const restoreCursorPosition = (position: number) => {
+    if (!editorRef.current) return;
+    
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(
+      editorRef.current,
+      NodeFilter.SHOW_TEXT,
+      null
+    );
+    
+    let node;
+    while ((node = walker.nextNode())) {
+      textNodes.push(node as Text);
+    }
+    
+    let currentPos = 0;
+    for (const textNode of textNodes) {
+      const nodeLength = textNode.length;
+      if (currentPos + nodeLength >= position) {
+        const range = document.createRange();
+        const offset = Math.min(position - currentPos, nodeLength);
+        range.setStart(textNode, offset);
+        range.collapse(true);
+        
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        return;
+      }
+      currentPos += nodeLength;
+    }
+  };
 
-      const direction = detectLineDirection(currentLine);
-      setCurrentLineDir(direction);
-    };
-
-    updateDirection();
-  }, [value]);
+  const handleInput = () => {
+    if (!editorRef.current) return;
+    const cursorPos = saveCursorPosition();
+    const newValue = editorRef.current.innerText;
+    onChange(newValue);
+    
+    // Restore cursor after React re-renders the content
+    setTimeout(() => {
+      if (cursorPos !== null) {
+        restoreCursorPosition(cursorPos);
+      }
+    }, 0);
+  };
 
   const handleFormat = (format: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+    const editor = editorRef.current;
+    if (!editor) return;
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = value.substring(start, end);
+    const cursorPos = saveCursorPosition();
+    if (cursorPos === null) return;
+
+    const text = editor.innerText;
+    // Find selection boundaries
+    const textBeforeCursor = text.substring(0, cursorPos);
+    const lineStart = textBeforeCursor.lastIndexOf('\n') + 1;
+    const textAfterCursor = text.substring(cursorPos);
+    const lineEnd = textAfterCursor.indexOf('\n');
+    const end = lineEnd === -1 ? text.length : cursorPos + lineEnd;
+    
+    const selectedText = text.substring(cursorPos, end);
     
     let newText: string;
     let newCursorPos: number;
 
-    // Handle list and quote prefixes (add to beginning of line)
+    // Handle list and quote prefixes
     if (format === "* " || format === "1. " || format === "> ") {
-      // Find the start of the current line
-      const beforeCursor = value.substring(0, start);
-      const lineStart = beforeCursor.lastIndexOf('\n') + 1;
-      
-      newText = value.substring(0, lineStart) + 
+      newText = text.substring(0, lineStart) + 
                 format + 
-                value.substring(lineStart);
-      newCursorPos = start + format.length;
+                text.substring(lineStart);
+      newCursorPos = cursorPos + format.length;
     } else {
-      // Handle inline formatting (wrap selected text)
-      newText = value.substring(0, start) + 
+      // Handle inline formatting
+      newText = text.substring(0, cursorPos) + 
                 format + selectedText + format + 
-                value.substring(end);
-      newCursorPos = end + format.length * 2;
+                text.substring(end);
+      newCursorPos = cursorPos + format.length;
     }
     
     onChange(newText);
     
-    // Restore focus and selection
     setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      restoreCursorPosition(newCursorPos);
+      editor.focus();
     }, 0);
   };
 
   const handleClearFormat = () => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+    const editor = editorRef.current;
+    if (!editor) return;
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = value.substring(start, end);
+    const cursorPos = saveCursorPosition();
+    if (cursorPos === null) return;
+
+    const text = editor.innerText;
     
     // Remove all formatting markers
-    const cleanedText = selectedText
-      .replace(/\*\*\*/g, '') // Bold italic
-      .replace(/\*\*/g, '')   // Bold (double asterisk)
-      .replace(/\*/g, '')     // Bold (single asterisk)
-      .replace(/_/g, '')      // Italic
-      .replace(/~/g, '')      // Strikethrough
-      .replace(/```/g, '')    // Monospace
-      .replace(/`/g, '')      // Inline code
-      .replace(/^[*-]\s/gm, '') // Bulleted lists
-      .replace(/^\d+\.\s/gm, '') // Numbered lists
-      .replace(/^>\s/gm, ''); // Quotes
+    const cleanedText = text
+      .replace(/\*\*\*/g, '')
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/_/g, '')
+      .replace(/~/g, '')
+      .replace(/```/g, '')
+      .replace(/`/g, '')
+      .replace(/^[*-]\s/gm, '')
+      .replace(/^\d+\.\s/gm, '')
+      .replace(/^>\s/gm, '');
     
-    const newText = value.substring(0, start) + 
-                    cleanedText + 
-                    value.substring(end);
-    
-    onChange(newText);
+    onChange(cleanedText);
     
     setTimeout(() => {
-      textarea.focus();
-      const newCursorPos = start + cleanedText.length;
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      if (cursorPos !== null) {
+        restoreCursorPosition(cursorPos);
+      }
+      editor.focus();
     }, 0);
   };
 
   const handleEmojiSelect = (emoji: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+    const editor = editorRef.current;
+    if (!editor) return;
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    
-    const newText = value.substring(0, start) + 
+    const cursorPos = saveCursorPosition();
+    if (cursorPos === null) return;
+
+    const text = editor.innerText;
+    const newText = text.substring(0, cursorPos) + 
                     emoji + 
-                    value.substring(end);
+                    text.substring(cursorPos);
     
     onChange(newText);
     setShowEmojiPicker(false);
     
     setTimeout(() => {
-      textarea.focus();
-      const newCursorPos = start + emoji.length;
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      restoreCursorPosition(cursorPos + emoji.length);
+      editor.focus();
     }, 0);
+  };
+
+  // Render content with per-line direction
+  const renderContent = () => {
+    if (!value) return null;
+    
+    const lines = value.split('\n');
+    return lines.map((line, index) => {
+      const direction = detectLineDirection(line);
+      return (
+        <div 
+          key={index}
+          dir={direction}
+          style={{ 
+            textAlign: direction === 'rtl' ? 'right' : 'left',
+            minHeight: line === '' ? '1.5em' : 'auto'
+          }}
+        >
+          {line || '\u200B'}
+        </div>
+      );
+    });
   };
 
   return (
@@ -151,15 +210,16 @@ export default function MessageComposer({ value, onChange, isRTL = false }: Mess
       )}
       
       <div className="flex-1 p-4">
-        <Textarea
-          ref={textareaRef}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Type your message here... Use *bold*, _italic_, ~strikethrough~, ```monospace```, `inline code`, > quote, * list, or 1. numbered list"
-          className="h-full min-h-[300px] resize-none font-sans"
-          dir={currentLineDir}
-          style={{ textAlign: currentLineDir === 'rtl' ? 'right' : 'left' }}
-        />
+        <div
+          ref={editorRef}
+          contentEditable
+          onInput={handleInput}
+          suppressContentEditableWarning
+          className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-auto font-sans"
+          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+        >
+          {renderContent()}
+        </div>
       </div>
       
       <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
