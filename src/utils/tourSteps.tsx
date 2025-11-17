@@ -1,4 +1,5 @@
 import { Step } from 'react-joyride';
+import { Lightbulb } from 'lucide-react';
 
 const isMobileViewport = () => window.innerWidth < 768;
 
@@ -7,122 +8,67 @@ export const tourSteps: Step[] = [
     target: 'body',
     content: (
       <div>
-        <h2 className={`font-bold mb-2 ${isMobileViewport() ? 'text-base' : 'text-lg'}`}>Welcome to WhatsApp Preview Tool! 👋</h2>
-        <p className={isMobileViewport() ? 'text-xs' : 'text-sm'}>
-          {isMobileViewport() 
-            ? "Quick tour of key features"
-            : "Let's take a quick tour to help you get started with all the powerful features."
-          }
+        <h2 className="text-lg font-bold mb-2">Welcome to WhatsApp Preview Tool! 👋</h2>
+        <p className="mb-3">
+          Write WhatsApp messages with rich formatting and see them preview in real-time.
         </p>
+        <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-md text-sm">
+          <Lightbulb className="h-4 w-4 text-amber-500" />
+          <span>This quick tour takes just 30 seconds</span>
+        </div>
       </div>
     ),
     placement: 'center',
     disableBeacon: true,
   },
   {
-    target: '[data-tour="composer"]',
+    target: '[data-tour="main-grid"]',
     content: (
       <div>
-        <h3 className="font-semibold mb-2">📝 Message Composer</h3>
-        <p>Type your WhatsApp messages here. The preview updates in real-time as you type!</p>
+        <h3 className="font-semibold mb-2">✨ Side-by-Side Magic</h3>
+        <p className="mb-2">Type on the left, preview on the right - updates instantly!</p>
+        <ul className="text-sm space-y-1 text-muted-foreground">
+          <li>• Apply formatting with toolbar buttons</li>
+          <li>• Switch between 3 draft slots</li>
+          <li>• Toggle preview modes (light/dark, mobile/desktop)</li>
+        </ul>
       </div>
     ),
-    placement: 'right',
+    placement: 'top',
   },
   {
     target: '[data-tour="formatting-toolbar"]',
     content: (
       <div>
-        <h3 className="font-semibold mb-2">✨ Formatting Toolbar</h3>
-        <p>Apply WhatsApp formatting with one click:</p>
-        <ul className="list-disc list-inside mt-2 text-sm">
-          <li>Bold, Italic, Strikethrough</li>
-          <li>Code blocks and lists</li>
-          <li>Insert emojis</li>
-        </ul>
+        <h3 className="font-semibold mb-2">🚀 Powerful Tools Available</h3>
+        <div className="space-y-2">
+          <div className="flex items-start gap-2">
+            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold">1</div>
+            <div className="flex-1">
+              <p className="font-medium text-sm">Formatting Toolbar</p>
+              <p className="text-xs text-muted-foreground">Bold, italic, lists, emojis & more</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2">
+            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold">2</div>
+            <div className="flex-1">
+              <p className="font-medium text-sm">Readability Score</p>
+              <p className="text-xs text-muted-foreground">Check if your message is easy to read</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2">
+            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold">3</div>
+            <div className="flex-1">
+              <p className="font-medium text-sm">Version History</p>
+              <p className="text-xs text-muted-foreground">Restore previous versions anytime</p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 p-2 bg-muted/30 rounded text-xs">
+          💡 Click Help button anytime for detailed guides
+        </div>
       </div>
     ),
     placement: 'bottom',
-  },
-  {
-    target: '[data-tour="readability-score"]',
-    content: (
-      <div>
-        <h3 className="font-semibold mb-2">📊 Readability Analyzer</h3>
-        <p>Get real-time feedback on your message's readability:</p>
-        <ul className="list-disc list-inside mt-2 text-sm">
-          <li>Flesch Reading Ease Score</li>
-          <li>Estimated reading time</li>
-          <li>Long sentence warnings</li>
-        </ul>
-      </div>
-    ),
-    placement: 'bottom',
-  },
-  {
-    target: '[data-tour="draft-switcher"]',
-    content: (
-      <div>
-        <h3 className="font-semibold mb-2">📑 Multiple Drafts</h3>
-        <p>Work on up to 3 different messages simultaneously. Switch between drafts instantly and auto-save is always on!</p>
-      </div>
-    ),
-    placement: 'bottom',
-  },
-  {
-    target: '[data-tour="preview"]',
-    content: (
-      <div>
-        <h3 className="font-semibold mb-2">📱 Live Preview</h3>
-        <p>See exactly how your message will look in WhatsApp with formatting applied!</p>
-      </div>
-    ),
-    placement: 'left',
-  },
-  {
-    target: '[data-tour="preview-controls"]',
-    content: (
-      <div>
-        <h3 className="font-semibold mb-2">🎨 Preview Modes</h3>
-        <p>Customize your preview experience:</p>
-        <ul className="list-disc list-inside mt-2 text-sm">
-          <li>Light/Dark theme</li>
-          <li>Mobile/Desktop view</li>
-          <li>Sender/Receiver perspective</li>
-        </ul>
-      </div>
-    ),
-    placement: 'left',
-  },
-  {
-    target: '[data-tour="version-history"]',
-    content: (
-      <div>
-        <h3 className="font-semibold mb-2">🕐 Version History</h3>
-        <p>Every change is saved automatically. Access your last 10 versions and restore any previous version with one click!</p>
-      </div>
-    ),
-    placement: 'bottom',
-  },
-  {
-    target: '[data-tour="help-button"]',
-    content: (
-      <div>
-        <h3 className="font-semibold mb-2">❓ Need Help?</h3>
-        <p>Click here anytime to view formatting guides, keyboard shortcuts, and tips & tricks!</p>
-      </div>
-    ),
-    placement: 'bottom',
-  },
-  {
-    target: 'body',
-    content: (
-      <div>
-        <h2 className="text-lg font-bold mb-2">You're all set! 🎉</h2>
-        <p className="mb-3">Start composing your WhatsApp messages with confidence.</p>
-        <p className="text-sm text-muted-foreground">You can restart this tour anytime from the Help menu.</p>
-      </div>
-    ),
-    placement: 'center',
   },
 ];

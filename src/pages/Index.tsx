@@ -89,7 +89,7 @@ export default function Index() {
 
       {/* Main Content */}
       <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6" data-tour="main-grid">
           <div data-tour="composer">
             <MessageComposer 
               value={activeDraft.content} 
