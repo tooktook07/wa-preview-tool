@@ -41,7 +41,7 @@ export default function WhatsAppPreview({
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
-      <div className="p-3 border-b bg-muted/50 flex items-center justify-between">
+      <div className="p-3 border-b bg-muted/30">
         <div>
           <h2 className="text-base font-semibold text-foreground">WhatsApp Preview</h2>
           <p className="text-xs text-muted-foreground">Live preview of your formatted message</p>
