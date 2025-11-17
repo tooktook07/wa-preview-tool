@@ -1,4 +1,4 @@
-import { parseWhatsAppFormatting, detectRTL } from "@/utils/formatParser";
+import { parseWhatsAppFormatting, detectRTL, detectLineDirection } from "@/utils/formatParser";
 import { useMemo } from "react";
 import PreviewControls, { ThemeMode, DeviceMode } from "./PreviewControls";
 
@@ -17,7 +17,9 @@ export default function WhatsAppPreview({
   onThemeChange,
   onDeviceChange 
 }: WhatsAppPreviewProps) {
+  // Detect if message has any RTL content (for overall layout comfort)
   const isRTL = useMemo(() => detectRTL(message), [message]);
+  // Format message with per-line direction detection
   const formattedMessage = useMemo(() => parseWhatsAppFormatting(message), [message]);
 
   // Theme-specific colors
@@ -133,7 +135,6 @@ export default function WhatsAppPreview({
                             <div 
                               className="relative rounded-lg shadow-md transition-all duration-200 max-w-[75%]"
                               style={{ backgroundColor: bubbleColor }}
-                              dir={isRTL ? 'rtl' : 'ltr'}
                             >
                               <div 
                                 className={`absolute top-0 ${isRTL ? 'left-0 -ml-2' : 'right-0 -mr-2'} w-0 h-0 
@@ -264,7 +265,6 @@ export default function WhatsAppPreview({
                     <div 
                       className="relative rounded-lg shadow-md transition-all duration-200 max-w-[85%]"
                       style={{ backgroundColor: bubbleColor }}
-                      dir={isRTL ? 'rtl' : 'ltr'}
                     >
                       <div 
                         className={`absolute top-0 ${isRTL ? 'left-0 -ml-2' : 'right-0 -mr-2'} w-0 h-0 
