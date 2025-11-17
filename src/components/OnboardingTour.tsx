@@ -52,8 +52,8 @@ export function OnboardingTour({ run, onComplete, onSkip }: OnboardingTourProps)
         },
         tooltip: {
           fontSize: isMobile ? 12 : 14,
-          padding: isMobile ? 12 : 20,
-          maxWidth: isMobile ? '90vw' : 420,
+          padding: isMobile ? 10 : 16,
+          maxWidth: isMobile ? '85vw' : 360,
         },
         tooltipContainer: {
           textAlign: 'left',
