@@ -159,6 +159,8 @@ textarea:not(.composer-textarea) {
 
 .composer-textarea {
   font-size: 14px !important;
+  unicode-bidi: plaintext;
+  text-align: start;
 }
 
 @media (min-width: 768px) {
