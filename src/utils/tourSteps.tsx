@@ -37,11 +37,26 @@ export const tourSteps: Step[] = [
         <ul className="text-xs space-y-1 text-muted-foreground">
           <li>• Bold, italic, lists & emojis</li>
           <li>• Readability score</li>
-          <li>• Version history</li>
+          <li>• Long message warnings</li>
         </ul>
       </div>
     ),
     placement: 'top',
+    offset: 10,
+  },
+  {
+    target: '[data-tour="help-button"]',
+    content: (
+      <div>
+        <h3 className="text-sm font-semibold mb-1.5">Need Help?</h3>
+        <ul className="text-xs space-y-1 text-muted-foreground">
+          <li>• Access formatting guides</li>
+          <li>• View version history</li>
+          <li>• Learn keyboard shortcuts</li>
+        </ul>
+      </div>
+    ),
+    placement: 'bottom',
     offset: 10,
   },
 ];
