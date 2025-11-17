@@ -136,7 +136,7 @@ export default function Index() {
       {/* Features Section */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <p>
-              Supports bold, italic, strikethrough, monospace, inline code, lists, quotes & RTL languages
+              100% private & secure - All processing happens locally in your browser with zero data collection
             </p>
             <p className="opacity-70">
               Made with WhatsApp formatting syntax
