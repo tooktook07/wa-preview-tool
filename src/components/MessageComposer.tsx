@@ -82,20 +82,27 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     if (!selection || selection.rangeCount === 0) return;
 
     const range = selection.getRangeAt(0);
-    const cursorPos = saveCursorPosition();
-    if (cursorPos === null) return;
-
     const text = editor.innerText;
+    
+    // Get selection start position
+    const preSelectionRange = range.cloneRange();
+    preSelectionRange.selectNodeContents(editor);
+    preSelectionRange.setEnd(range.startContainer, range.startOffset);
+    const selectionStart = preSelectionRange.toString().length;
+    
+    // Get selected text
+    const selectedText = range.toString();
+    const selectionEnd = selectionStart + selectedText.length;
     
     // Handle list and quote prefixes
     if (format === "* " || format === "1. " || format === "> ") {
-      const textBeforeCursor = text.substring(0, cursorPos);
+      const textBeforeCursor = text.substring(0, selectionStart);
       const lineStart = textBeforeCursor.lastIndexOf('\n') + 1;
       
       const newText = text.substring(0, lineStart) + 
                 format + 
                 text.substring(lineStart);
-      const newCursorPos = cursorPos + format.length;
+      const newCursorPos = selectionStart + format.length;
       
       onChange(newText);
       
@@ -105,13 +112,10 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
       }, 0);
     } else {
       // Handle inline formatting (bold, italic, etc.)
-      const selectedText = range.toString();
-      const selectionStart = cursorPos - selectedText.length;
-      
-      // Insert format markers around selection or at cursor
+      // Replace selected text with formatted version
       const newText = text.substring(0, selectionStart) + 
                 format + selectedText + format + 
-                text.substring(cursorPos);
+                text.substring(selectionEnd);
       const newCursorPos = selectionStart + format.length + selectedText.length;
       
       onChange(newText);
