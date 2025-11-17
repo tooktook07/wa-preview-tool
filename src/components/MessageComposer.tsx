@@ -176,6 +176,14 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     }, 0);
   };
 
+  // Sync external value changes only when editor is not focused
+  React.useEffect(() => {
+    if (editorRef.current && document.activeElement !== editorRef.current) {
+      if (editorRef.current.innerText !== value) {
+        editorRef.current.innerText = value;
+      }
+    }
+  }, [value]);
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
@@ -204,8 +212,7 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           onPaste={handlePaste}
           suppressContentEditableWarning
           className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-auto font-sans"
-          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
-          dangerouslySetInnerHTML={{ __html: value.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;') || '' }}
+          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', unicodeBidi: 'plaintext' }}
         />
       </div>
       
