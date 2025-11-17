@@ -51,101 +51,112 @@ export default function FormattingToolbar({ onFormat, onClearFormat, onEmojiClic
   );
 
   return (
-    <div className="flex items-center gap-1 p-2 border-b bg-card">
-      {formatButtons.map(({ icon: Icon, label, format }) => (
-        <Tooltip key={format}>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onFormat(format)}
-              className="h-8 w-8 p-0"
-            >
-              <Icon className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{label}</p>
-          </TooltipContent>
-        </Tooltip>
-      ))}
-      
-      <div className="w-px h-6 bg-border mx-1" />
-
-      {listButtons.map(({ icon: Icon, label, prefix }) => (
-        <Tooltip key={label}>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleListFormat(prefix)}
-              className="h-8 w-8 p-0"
-            >
-              <Icon className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{label}</p>
-          </TooltipContent>
-        </Tooltip>
-      ))}
-      
-      <div className="w-px h-6 bg-border mx-1" />
-      
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClearFormat}
-            className="h-8 w-8 p-0"
-          >
-            <Eraser className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Clear Format</p>
-        </TooltipContent>
-      </Tooltip>
-      
-      <div className="ml-auto flex items-center gap-1">
-        {readabilityMetrics && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className={`h-8 gap-1.5 text-xs px-2 ${getScoreColor()} hover:bg-accent/50`}
+    <div className="flex items-center gap-2 px-3 py-1.5 border-b bg-card">
+      {/* Group 1: Text Formatting */}
+      <div className="flex items-center gap-0.5">
+        {formatButtons.map(({ icon: Icon, label, format }) => (
+          <Tooltip key={format}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onFormat(format)}
+                className="h-7 w-7 p-0"
               >
-                {getScoreIcon()}
-                <span className="font-medium">Score: {readabilityMetrics.fleschScore}</span>
-                {shouldShowWarning && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                )}
+                <Icon className="h-3.5 w-3.5" />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-80">
-              <ReadabilityPanel metrics={readabilityMetrics} />
-            </PopoverContent>
-          </Popover>
-        )}
-        
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{label}</p>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </div>
+      
+      <div className="w-px h-5 bg-border" />
+
+      {/* Group 2: Lists & Quotes */}
+      <div className="flex items-center gap-0.5">
+        {listButtons.map(({ icon: Icon, label, prefix }) => (
+          <Tooltip key={label}>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleListFormat(prefix)}
+                className="h-7 w-7 p-0"
+              >
+                <Icon className="h-3.5 w-3.5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{label}</p>
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </div>
+      
+      <div className="w-px h-5 bg-border" />
+      
+      {/* Group 3: Tools */}
+      <div className="flex items-center gap-0.5">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
               onClick={onEmojiClick}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 p-0"
             >
-              <Smile className="h-4 w-4" />
+              <Smile className="h-3.5 w-3.5" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
             <p>Insert Emoji</p>
           </TooltipContent>
         </Tooltip>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClearFormat}
+              className="h-7 w-7 p-0"
+            >
+              <Eraser className="h-3.5 w-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Clear Format</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
+      
+      {/* Spacer to push score to the right */}
+      <div className="flex-1" />
+      
+      {/* Group 4: Readability Score */}
+      {readabilityMetrics && (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`h-7 gap-1 text-xs px-2.5 ${getScoreColor()} hover:bg-accent/50`}
+            >
+              {getScoreIcon()}
+              <span className="font-medium">{readabilityMetrics.fleschScore}</span>
+              {shouldShowWarning && (
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-80">
+            <ReadabilityPanel metrics={readabilityMetrics} />
+          </PopoverContent>
+        </Popover>
+      )}
     </div>
   );
 }
