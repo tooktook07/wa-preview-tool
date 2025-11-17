@@ -2,9 +2,12 @@ import { useState } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
 import { MessageSquare } from "lucide-react";
+import { ThemeMode, DeviceMode } from "@/components/PreviewControls";
 
 export default function Index() {
   const [message, setMessage] = useState("");
+  const [theme, setTheme] = useState<ThemeMode>("light");
+  const [device, setDevice] = useState<DeviceMode>("desktop");
 
   return (
     <div className="min-h-screen bg-background">
@@ -29,7 +32,13 @@ export default function Index() {
       <main className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-6">
           <MessageComposer value={message} onChange={setMessage} />
-          <WhatsAppPreview message={message} />
+          <WhatsAppPreview 
+            message={message}
+            theme={theme}
+            device={device}
+            onThemeChange={setTheme}
+            onDeviceChange={setDevice}
+          />
         </div>
       </main>
 
