@@ -6,8 +6,12 @@ export const tourSteps: Step[] = [
     content: (
       <div>
         <h2 className="text-base font-semibold mb-1.5">Welcome! 👋</h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground mb-2">
           Write WhatsApp messages with formatting and see them preview instantly.
+        </p>
+        <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1.5">
+          <span className="text-base">🔒</span>
+          <span>100% private - everything stays on your device</span>
         </p>
       </div>
     ),

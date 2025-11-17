@@ -4,7 +4,7 @@ import { RenameDraftDialog } from "./RenameDraftDialog";
 import { useReadability } from "@/hooks/use-readability";
 import { useState, useRef } from "react";
 import * as React from "react";
-import { AlertTriangle, ChevronDown, Check, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { AlertTriangle, ChevronDown, Check, MoreVertical, Pencil, Trash2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { Draft } from "@/hooks/use-draft-manager";
 
 interface MessageComposerProps {
@@ -177,42 +183,43 @@ export default function MessageComposer({
             <h2 className="text-sm sm:text-base font-semibold text-foreground truncate">Message Composer</h2>
             <p className="text-xs text-muted-foreground hidden sm:block">Type or paste your WhatsApp message</p>
           </div>
-          <div
-            className="flex items-center gap-0 border rounded-md overflow-hidden flex-shrink-0"
-            data-tour="draft-switcher"
-          >
-            {/* Draft Selector Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex-1 sm:flex-initial h-9 gap-1 sm:gap-1.5 px-2 sm:px-2.5 justify-between text-xs font-medium hover:bg-muted/50 border-r rounded-none"
-                >
-                  <span className="truncate max-w-[100px] sm:max-w-[120px]">{activeDraft.name}</span>
-                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent align="end" className="w-48">
-                {drafts.map((draft) => (
-                  <DropdownMenuItem
-                    key={draft.id}
-                    onClick={() => onSwitchDraft(draft.id)}
-                    className="flex items-center justify-between"
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div
+              className="flex items-center gap-0 border rounded-md overflow-hidden"
+              data-tour="draft-switcher"
+            >
+              {/* Draft Selector Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 sm:flex-initial h-9 gap-1 sm:gap-1.5 px-2 sm:px-2.5 justify-between text-xs font-medium hover:bg-muted/50 border-r rounded-none"
                   >
-                    <span className="flex items-center gap-2">
-                      {draft.id === activeDraftId && <Check className="h-3 w-3" />}
-                      {draft.name}
-                    </span>
-                    {draft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    <span className="truncate max-w-[100px] sm:max-w-[120px]">{activeDraft.name}</span>
+                    <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
 
-            {/* More Menu */}
-            <DropdownMenu>
+                <DropdownMenuContent align="end" className="w-48">
+                  {drafts.map((draft) => (
+                    <DropdownMenuItem
+                      key={draft.id}
+                      onClick={() => onSwitchDraft(draft.id)}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="flex items-center gap-2">
+                        {draft.id === activeDraftId && <Check className="h-3 w-3" />}
+                        {draft.name}
+                      </span>
+                      {draft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* More Menu */}
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hover:bg-muted/50 rounded-none">
                   <MoreVertical className="h-4 w-4" />
@@ -240,6 +247,22 @@ export default function MessageComposer({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
+
+            {/* Privacy Badge */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-md bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300">
+                    <Lock className="h-3 w-3" />
+                    <span className="text-[10px] font-medium">Local</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-[200px]">
+                  <p className="text-xs">Your drafts are stored in your browser only. Nothing is sent to any server.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </div>

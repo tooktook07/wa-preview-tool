@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bold, Italic, Strikethrough, Code, Code2, List, ListOrdered, Quote, Sparkles, Keyboard, Lightbulb, PlayCircle } from "lucide-react";
+import { Bold, Italic, Strikethrough, Code, Code2, List, ListOrdered, Quote, Sparkles, Keyboard, Lightbulb, PlayCircle, Shield, CheckCircle, Database, WifiOff, UserX, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface HelpModalProps {
@@ -46,23 +46,28 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
         </DialogHeader>
 
         <Tabs defaultValue="getting-started" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-1 h-auto">
-            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 h-auto">
+            <TabsTrigger value="getting-started" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
               <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
               <span className="hidden sm:inline whitespace-nowrap">Getting Started</span>
               <span className="inline sm:hidden whitespace-nowrap">Start</span>
             </TabsTrigger>
-            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+            <TabsTrigger value="formatting" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
               <Bold className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
               <span className="hidden sm:inline whitespace-nowrap">Formatting</span>
               <span className="inline sm:hidden whitespace-nowrap">Format</span>
             </TabsTrigger>
-            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+            <TabsTrigger value="shortcuts" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
               <Keyboard className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
               <span className="hidden sm:inline whitespace-nowrap">Shortcuts</span>
               <span className="inline sm:hidden whitespace-nowrap">Keys</span>
             </TabsTrigger>
-            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-3 h-auto py-2">
+            <TabsTrigger value="privacy" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
+              <Shield className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">Privacy</span>
+              <span className="inline sm:hidden whitespace-nowrap">🔒</span>
+            </TabsTrigger>
+            <TabsTrigger value="tips" className="text-[10px] sm:text-xs px-1 sm:px-2 h-auto py-2">
               <Lightbulb className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-0.5 sm:mr-1 flex-shrink-0" />
               <span className="hidden sm:inline whitespace-nowrap">Tips & Tricks</span>
               <span className="inline sm:hidden whitespace-nowrap">Tips</span>
@@ -240,6 +245,68 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
               </div>
             </TabsContent>
 
+            {/* Privacy & Data Tab */}
+            <TabsContent value="privacy" className="space-y-4 pr-4">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800">
+                  <Shield className="h-6 w-6 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-base mb-1 text-green-900 dark:text-green-100">
+                      Your Privacy is Our Priority
+                    </h3>
+                    <p className="text-sm text-green-700 dark:text-green-300">
+                      This tool is designed with privacy-first principles. Everything runs locally in your browser.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <PrivacyFeature 
+                    icon={<CheckCircle className="h-5 w-5" />}
+                    title="100% Client-Side Operation"
+                    description="Everything runs directly in your browser. No backend servers process your data."
+                  />
+                  
+                  <PrivacyFeature 
+                    icon={<Shield className="h-5 w-5" />}
+                    title="Zero Data Collection"
+                    description="We don't collect, store, or transmit any of your message content. No analytics, no tracking."
+                  />
+                  
+                  <PrivacyFeature 
+                    icon={<Database className="h-5 w-5" />}
+                    title="Local Storage Only"
+                    description="Your drafts and version history are stored in your browser's local storage. Only you can access them."
+                  />
+                  
+                  <PrivacyFeature 
+                    icon={<WifiOff className="h-5 w-5" />}
+                    title="Offline Capable"
+                    description="Once loaded, the app works completely offline. No internet connection required."
+                  />
+                  
+                  <PrivacyFeature 
+                    icon={<UserX className="h-5 w-5" />}
+                    title="No Account Required"
+                    description="No sign-ups, no logins, no email addresses. Just open and start using."
+                  />
+                </div>
+
+                <div className="p-4 rounded-lg bg-muted/50 border">
+                  <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+                    <Lock className="h-4 w-4" />
+                    Your Data, Your Control
+                  </h4>
+                  <ul className="text-xs text-muted-foreground space-y-1.5">
+                    <li>• Clear browser data to delete all drafts and history</li>
+                    <li>• Nothing is sent to external servers</li>
+                    <li>• Your messages never leave your device</li>
+                    <li>• All processing happens in your browser</li>
+                  </ul>
+                </div>
+              </div>
+            </TabsContent>
+
             {/* Tips & Tricks Tab */}
             <TabsContent value="tips" className="space-y-4 pr-4">
               <div>
@@ -339,6 +406,20 @@ function TipCard({ title, description }: { title: string; description: string })
     <div className="p-3 bg-muted/30 rounded-md border-l-2 border-primary">
       <h4 className="font-medium text-sm mb-1">{title}</h4>
       <p className="text-sm text-muted-foreground">{description}</p>
+    </div>
+  );
+}
+
+function PrivacyFeature({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5">
+        {icon}
+      </div>
+      <div className="flex-1">
+        <h4 className="font-semibold text-sm mb-1">{title}</h4>
+        <p className="text-xs text-muted-foreground">{description}</p>
+      </div>
     </div>
   );
 }
