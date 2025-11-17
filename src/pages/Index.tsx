@@ -65,7 +65,7 @@ export default function Index() {
                   data-tour="help-button"
                 >
                   <HelpCircle className="h-4 w-4 sm:h-4 sm:w-4" />
-                  <span className="hidden sm:inline text-xs sm:text-sm">Help</span>
+                  <span className="hidden sm:inline text-xs">Help</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -75,7 +75,7 @@ export default function Index() {
                   data-tour="version-history"
                 >
                   <History className="h-4 w-4 sm:h-4 sm:w-4" />
-                  <span className="hidden sm:inline text-xs sm:text-sm">History</span>
+                  <span className="hidden sm:inline text-xs">History</span>
                   {activeDraft.versions.length > 0 && (
                     <span className="ml-0.5 sm:ml-1 text-[10px] sm:text-xs bg-primary/10 text-primary px-1 sm:px-1.5 py-0.5 rounded">
                       {activeDraft.versions.length}
