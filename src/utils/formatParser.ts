@@ -61,9 +61,9 @@ export function parseWhatsAppFormatting(text: string): string {
       return `<div ${dirAttr} style="display: flex; gap: 8px; margin: 2px 0; ${direction === 'rtl' ? 'flex-direction: row-reverse;' : ''} text-align: ${textAlign};"><span style="min-width: 20px;">•</span><span>${line.substring(2)}</span></div>`;
     }
     
-    // Regular line with direction - preserve empty lines
+    // Regular line with direction - preserve empty lines without double spacing
     if (line === '') {
-      return '<br>';
+      return '<span style="display: block; height: 1.2em;"></span>';
     }
     return `<span ${dirAttr} style="display: block; text-align: ${textAlign};">${line}</span>`;
   }).join('');
