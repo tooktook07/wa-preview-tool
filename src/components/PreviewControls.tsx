@@ -21,14 +21,16 @@ export default function PreviewControls({
   return (
     <div className="flex items-center gap-2">
       {/* Theme Toggle */}
-      <div className="flex items-center border rounded-lg overflow-hidden">
+      <div className="flex items-center bg-white/10 rounded-lg overflow-hidden">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant={theme === "light" ? "default" : "ghost"}
+              variant="ghost"
               size="sm"
               onClick={() => onThemeChange("light")}
-              className="rounded-none h-8 px-3"
+              className={`rounded-none h-8 px-3 text-white hover:bg-white/20 ${
+                theme === "light" ? "bg-white/30" : ""
+              }`}
             >
               <Sun className="h-4 w-4" />
             </Button>
@@ -39,10 +41,12 @@ export default function PreviewControls({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant={theme === "dark" ? "default" : "ghost"}
+              variant="ghost"
               size="sm"
               onClick={() => onThemeChange("dark")}
-              className="rounded-none h-8 px-3 border-l"
+              className={`rounded-none h-8 px-3 border-l border-white/20 text-white hover:bg-white/20 ${
+                theme === "dark" ? "bg-white/30" : ""
+              }`}
             >
               <Moon className="h-4 w-4" />
             </Button>
@@ -52,14 +56,16 @@ export default function PreviewControls({
       </div>
 
       {/* Device Toggle */}
-      <div className="flex items-center border rounded-lg overflow-hidden">
+      <div className="flex items-center bg-white/10 rounded-lg overflow-hidden">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant={device === "mobile" ? "default" : "ghost"}
+              variant="ghost"
               size="sm"
               onClick={() => onDeviceChange("mobile")}
-              className="rounded-none h-8 px-3"
+              className={`rounded-none h-8 px-3 text-white hover:bg-white/20 ${
+                device === "mobile" ? "bg-white/30" : ""
+              }`}
             >
               <Smartphone className="h-4 w-4" />
             </Button>
@@ -70,10 +76,12 @@ export default function PreviewControls({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant={device === "desktop" ? "default" : "ghost"}
+              variant="ghost"
               size="sm"
               onClick={() => onDeviceChange("desktop")}
-              className="rounded-none h-8 px-3 border-l"
+              className={`rounded-none h-8 px-3 border-l border-white/20 text-white hover:bg-white/20 ${
+                device === "desktop" ? "bg-white/30" : ""
+              }`}
             >
               <Monitor className="h-4 w-4" />
             </Button>

@@ -69,16 +69,9 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData('text/plain');
-    const cursorPos = saveCursorPosition();
-    if (cursorPos === null) return;
-
-    const currentText = editorRef.current?.innerText || '';
-    const newText = currentText.substring(0, cursorPos) + text + currentText.substring(cursorPos);
-    onChange(newText);
-
-    setTimeout(() => {
-      restoreCursorPosition(cursorPos + text.length);
-    }, 0);
+    
+    // Insert text at cursor using execCommand for proper native behavior
+    document.execCommand('insertText', false, text);
   };
 
   const handleFormat = (format: string) => {
@@ -187,9 +180,9 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
-      <div className="p-4 border-b bg-muted/50">
-        <h2 className="text-lg font-semibold">Message Composer</h2>
-        <p className="text-sm text-muted-foreground">Type your message and apply formatting</p>
+      <div className="p-3 border-b bg-muted/30">
+        <h2 className="text-base font-semibold text-foreground">Message Composer</h2>
+        <p className="text-xs text-muted-foreground">Type your message and apply formatting</p>
       </div>
       
       <FormattingToolbar 
@@ -212,7 +205,8 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           onPaste={handlePaste}
           suppressContentEditableWarning
           className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-auto font-sans"
-          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', unicodeBidi: 'plaintext' }}
+          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+          dir="auto"
         />
       </div>
       
