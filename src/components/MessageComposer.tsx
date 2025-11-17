@@ -178,14 +178,14 @@ export default function MessageComposer({
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-2 sm:p-3 border-b bg-muted/30">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h2 className="text-sm sm:text-base font-semibold text-foreground">Message Composer</h2>
+            <h2 className="text-sm sm:text-base font-semibold text-foreground truncate">Message Composer</h2>
             <p className="text-xs text-muted-foreground hidden sm:block">
               Type or paste your WhatsApp message
             </p>
           </div>
-          <div className="flex items-center gap-0 border rounded-md overflow-hidden w-full sm:w-auto max-w-[280px] sm:max-w-none flex-shrink-0" data-tour="draft-switcher">
+          <div className="flex items-center gap-0 border rounded-md overflow-hidden flex-shrink-0" data-tour="draft-switcher">
             {/* Draft Selector Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
