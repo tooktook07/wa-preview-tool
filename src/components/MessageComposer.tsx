@@ -176,21 +176,26 @@ export default function MessageComposer({
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-3 border-b bg-muted/30">
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-2">
+        <div className="flex items-start justify-between gap-4">
+          {/* Left Column: Title + Description */}
+          <div className="flex flex-col">
             <h2 className="text-sm font-medium text-foreground">Message Composer</h2>
-            
+            <p className="text-xs text-muted-foreground">Type your message and apply formatting</p>
+          </div>
+          
+          {/* Right Column: Draft Dropdown + Three Dots */}
+          <div className="flex items-center gap-2">
             {/* Draft Switcher Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-6 gap-1 text-xs px-2">
+                <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs px-2">
                   📝 {activeDraft.name}
                   {activeDraft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
               
-              <DropdownMenuContent align="start" className="w-48">
+              <DropdownMenuContent align="end" className="w-48">
                 {drafts.map((draft) => (
                   <DropdownMenuItem 
                     key={draft.id}
@@ -206,36 +211,35 @@ export default function MessageComposer({
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-          
-          {/* Draft Options Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <MoreVertical className="h-3.5 w-3.5" />
-              </Button>
-            </DropdownMenuTrigger>
             
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setRenamingDraft(activeDraft)}>
-                <Pencil className="mr-2 h-4 w-4" />
-                Rename Draft
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => {
-                  if (confirm(`Clear all content from "${activeDraft.name}"?`)) {
-                    onClearDraft(activeDraftId);
-                  }
-                }}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Clear Draft
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            {/* Draft Options Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-7 w-7">
+                  <MoreVertical className="h-3.5 w-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setRenamingDraft(activeDraft)}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Rename Draft
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => {
+                    if (confirm(`Clear all content from "${activeDraft.name}"?`)) {
+                      onClearDraft(activeDraftId);
+                    }
+                  }}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Clear Draft
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground">Type your message and apply formatting</p>
       </div>
       
       {renamingDraft && (
