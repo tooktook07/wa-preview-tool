@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
-import { MessageSquare, History } from "lucide-react";
+import { MessageSquare, History, HelpCircle } from "lucide-react";
 import { ThemeMode, DeviceMode, MessageMode } from "@/components/PreviewControls";
 import { detectRTL } from "@/utils/formatParser";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useDraftManager } from "@/hooks/use-draft-manager";
 import { DraftTabs } from "@/components/DraftTabs";
 import { VersionHistory } from "@/components/VersionHistory";
+import { HelpModal } from "@/components/HelpModal";
 import { Button } from "@/components/ui/button";
 
 export default function Index() {
@@ -26,6 +27,7 @@ export default function Index() {
   const [device, setDevice] = useLocalStorage<DeviceMode>("whatsapp-preview-device", "mobile");
   const [mode, setMode] = useLocalStorage<MessageMode>("whatsapp-message-mode", "sender");
   const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   
   const isRTL = useMemo(() => detectRTL(activeDraft.content), [activeDraft.content]);
 
@@ -44,20 +46,31 @@ export default function Index() {
                   </p>
                 </div>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowVersionHistory(true)}
-                className="flex items-center gap-2"
-              >
-                <History className="h-4 w-4" />
-                <span className="hidden sm:inline">History</span>
-                {activeDraft.versions.length > 0 && (
-                  <span className="ml-1 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
-                    {activeDraft.versions.length}
-                  </span>
-                )}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowHelp(true)}
+                  className="flex items-center gap-2"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                  <span className="hidden sm:inline">Help</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowVersionHistory(true)}
+                  className="flex items-center gap-2"
+                >
+                  <History className="h-4 w-4" />
+                  <span className="hidden sm:inline">History</span>
+                  {activeDraft.versions.length > 0 && (
+                    <span className="ml-1 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                      {activeDraft.versions.length}
+                    </span>
+                  )}
+                </Button>
+              </div>
           </div>
         </div>
       </header>
@@ -93,6 +106,11 @@ export default function Index() {
         draft={activeDraft}
         onRestore={restoreVersion}
         onDelete={deleteVersion}
+      />
+
+      <HelpModal 
+        open={showHelp}
+        onOpenChange={setShowHelp}
       />
 
       {/* Footer */}
