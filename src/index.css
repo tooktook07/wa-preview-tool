@@ -118,9 +118,10 @@ All colors MUST be HSL.
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
+  /* Improve button touch targets */
   button {
-    min-height: 28px;
-    min-width: 28px;
+    min-height: 36px;
+    min-width: 36px;
   }
   
   /* Prevent text selection during formatting */
@@ -129,14 +130,24 @@ All colors MUST be HSL.
     touch-action: manipulation;
   }
   
-  /* Better scrolling on mobile */
+  /* Better scrolling on mobile with momentum */
   .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    scroll-behavior: smooth;
   }
   
   .overflow-x-auto::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Utility class for hiding scrollbar */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 

@@ -61,20 +61,20 @@ export default function Index() {
                   variant="outline"
                   size="sm"
                   onClick={() => setShowHelp(true)}
-                  className="flex items-center gap-1 sm:gap-2 h-7 sm:h-8 px-2 sm:px-3"
+                  className="flex items-center gap-1 sm:gap-2 h-9 sm:h-8 px-2 sm:px-3"
                   data-tour="help-button"
                 >
-                  <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <HelpCircle className="h-4 w-4 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline text-xs sm:text-sm">Help</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowVersionHistory(true)}
-                  className="flex items-center gap-1 sm:gap-2 h-7 sm:h-8 px-2 sm:px-3"
+                  className="flex items-center gap-1 sm:gap-2 h-9 sm:h-8 px-2 sm:px-3"
                   data-tour="version-history"
                 >
-                  <History className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  <History className="h-4 w-4 sm:h-4 sm:w-4" />
                   <span className="hidden sm:inline text-xs sm:text-sm">History</span>
                   {activeDraft.versions.length > 0 && (
                     <span className="ml-0.5 sm:ml-1 text-[10px] sm:text-xs bg-primary/10 text-primary px-1 sm:px-1.5 py-0.5 rounded">

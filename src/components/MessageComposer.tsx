@@ -178,22 +178,33 @@ export default function MessageComposer({
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-2 sm:p-3 border-b bg-muted/30">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
-          {/* Left Column: Title + Description */}
-          <div className="flex flex-col">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div className="flex-1 min-w-0">
             <h2 className="text-sm sm:text-base font-semibold text-foreground">Message Composer</h2>
-            <p className="text-xs text-muted-foreground hidden sm:block">Type or paste your WhatsApp message</p>
+            <p className="text-xs text-muted-foreground hidden sm:block">
+              Type or paste your WhatsApp message
+            </p>
           </div>
-          
-          {/* Right Column: Draft Controls (Grouped Buttons) */}
-          <div className="flex items-center gap-0 border rounded-md overflow-hidden w-full sm:w-auto" data-tour="draft-switcher">
-            {/* Draft Switcher Dropdown */}
+          <div className="flex items-center gap-0 border rounded-md overflow-hidden w-full sm:w-auto max-w-[280px] sm:max-w-none flex-shrink-0" data-tour="draft-switcher">
+            {/* Draft Selector Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="flex-1 sm:flex-initial h-7 gap-1 sm:gap-1.5 text-xs px-2 sm:px-3 rounded-none border-r hover:bg-accent/50 justify-between">
-                  <span className="font-medium truncate max-w-[120px] sm:max-w-[150px]">{activeDraft.name}</span>
-                  {activeDraft.content && <span className="h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />}
-                  <ChevronDown className="h-3 w-3 opacity-50 flex-shrink-0" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="flex-1 sm:flex-initial h-9 gap-1 sm:gap-1.5 px-2 sm:px-2.5 justify-between text-xs font-medium hover:bg-muted/50 border-r rounded-none"
+                >
+                  <span className="truncate max-w-[100px] sm:max-w-[120px]">
+                    {activeDraft.name}
+                  </span>
+                  <div className="flex items-center gap-1 sm:gap-1.5 text-muted-foreground">
+                    {activeDraft.content.length > 0 && (
+                      <span className="text-[10px] bg-primary/10 text-primary px-1 sm:px-1.5 py-0.5 rounded">
+                        {activeDraft.content.length}
+                      </span>
+                    )}
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               
@@ -214,11 +225,15 @@ export default function MessageComposer({
               </DropdownMenuContent>
             </DropdownMenu>
             
-            {/* Draft Options Menu */}
+            {/* More Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-7 px-2 rounded-none hover:bg-accent/50">
-                  <MoreVertical className="h-3.5 w-3.5" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-9 w-9 p-0 hover:bg-muted/50 rounded-none"
+                >
+                  <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               
@@ -278,18 +293,15 @@ export default function MessageComposer({
         />
         
         {/* Character & Word Count Overlay */}
-        <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-background/80 backdrop-blur-sm border rounded-md shadow-sm">
-          <div className="flex items-center gap-1.5 sm:gap-3 text-[10px] sm:text-xs">
-            <span className={getCounterColor()}>
-              {characterCount} chars
-            </span>
-            <span className="text-muted-foreground">
-              {wordCount} words
-            </span>
+        <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-background/90 backdrop-blur-sm border rounded-md shadow-sm pointer-events-none">
+          <div className={`flex items-center gap-1.5 sm:gap-2 text-xs ${getCounterColor()}`}>
+            <span>{characterCount.toLocaleString()}</span>
+            <span className="text-muted-foreground hidden xs:inline">chars</span>
+            <span className="text-muted-foreground">•</span>
+            <span>{wordCount}</span>
+            <span className="text-muted-foreground hidden xs:inline">words</span>
             {showWarning && (
-              <div className="flex items-center gap-1 text-amber-600">
-                <AlertTriangle className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-              </div>
+              <AlertTriangle className="h-3.5 w-3.5" />
             )}
           </div>
         </div>
