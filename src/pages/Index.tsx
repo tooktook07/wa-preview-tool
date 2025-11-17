@@ -50,7 +50,8 @@ export default function Index() {
         <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
           <p>
             Supports <strong>Bold (*text*)</strong>, <em>Italic (_text_)</em>,{" "}
-            <s>Strikethrough (~text~)</s>, and <code className="bg-muted px-1 rounded">Monospace (```text```)</code>
+            <s>Strikethrough (~text~)</s>, <code className="bg-muted px-1 rounded">Monospace (```text```)</code>,{" "}
+            <code className="bg-muted px-1 rounded">Inline Code (`text`)</code>, Lists, Quotes, and more
           </p>
           <p className="mt-2">Includes full RTL language support for Arabic and Hebrew</p>
         </div>
