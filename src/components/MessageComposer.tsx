@@ -2,7 +2,6 @@ import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
 import { useState, useRef } from "react";
 import * as React from "react";
-import { detectLineDirection } from "@/utils/formatParser";
 
 interface MessageComposerProps {
   value: string;
@@ -12,132 +11,81 @@ interface MessageComposerProps {
 
 export default function MessageComposer({ value, onChange }: MessageComposerProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const editorRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-
-  // Save and restore cursor position
-  const saveCursorPosition = () => {
-    const selection = window.getSelection();
-    if (!selection || !editorRef.current) return null;
-    
-    const range = selection.getRangeAt(0);
-    const preSelectionRange = range.cloneRange();
-    preSelectionRange.selectNodeContents(editorRef.current);
-    preSelectionRange.setEnd(range.startContainer, range.startOffset);
-    return preSelectionRange.toString().length;
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(e.target.value);
   };
 
-  const restoreCursorPosition = (position: number) => {
-    if (!editorRef.current) return;
-    
-    const textNodes: Text[] = [];
-    const walker = document.createTreeWalker(
-      editorRef.current,
-      NodeFilter.SHOW_TEXT,
-      null
-    );
-    
-    let node;
-    while ((node = walker.nextNode())) {
-      textNodes.push(node as Text);
-    }
-    
-    let currentPos = 0;
-    for (const textNode of textNodes) {
-      const nodeLength = textNode.length;
-      if (currentPos + nodeLength >= position) {
-        const range = document.createRange();
-        const offset = Math.min(position - currentPos, nodeLength);
-        range.setStart(textNode, offset);
-        range.collapse(true);
-        
-        const selection = window.getSelection();
-        selection?.removeAllRanges();
-        selection?.addRange(range);
-        return;
-      }
-      currentPos += nodeLength;
-    }
-  };
-
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    if (!editorRef.current) return;
-    const newValue = editorRef.current.innerText;
-    onChange(newValue);
-  };
-
-  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData('text/plain');
     
-    // Insert text at cursor using execCommand for proper native behavior
-    document.execCommand('insertText', false, text);
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const newText = value.substring(0, start) + text + value.substring(end);
+    
+    onChange(newText);
+    
+    // Set cursor position after paste
+    setTimeout(() => {
+      textarea.setSelectionRange(start + text.length, start + text.length);
+      textarea.focus();
+    }, 0);
   };
 
   const handleFormat = (format: string) => {
-    const editor = editorRef.current;
-    if (!editor) return;
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = selection.getRangeAt(0);
-    const text = editor.innerText;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = value.substring(start, end);
     
-    // Get selection start position
-    const preSelectionRange = range.cloneRange();
-    preSelectionRange.selectNodeContents(editor);
-    preSelectionRange.setEnd(range.startContainer, range.startOffset);
-    const selectionStart = preSelectionRange.toString().length;
-    
-    // Get selected text
-    const selectedText = range.toString();
-    const selectionEnd = selectionStart + selectedText.length;
-    
-    // Handle list and quote prefixes
+    // Handle list and quote prefixes (line-based formatting)
     if (format === "* " || format === "1. " || format === "> ") {
-      const textBeforeCursor = text.substring(0, selectionStart);
-      const lineStart = textBeforeCursor.lastIndexOf('\n') + 1;
+      // Find the start of the current line
+      const textBeforeStart = value.substring(0, start);
+      const lineStart = textBeforeStart.lastIndexOf('\n') + 1;
       
-      const newText = text.substring(0, lineStart) + 
-                format + 
-                text.substring(lineStart);
-      const newCursorPos = selectionStart + format.length;
+      const newText = value.substring(0, lineStart) + 
+                      format + 
+                      value.substring(lineStart);
+      const newCursorPos = start + format.length;
       
       onChange(newText);
       
       setTimeout(() => {
-        restoreCursorPosition(newCursorPos);
-        editor.focus();
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
+        textarea.focus();
       }, 0);
     } else {
-      // Handle inline formatting (bold, italic, etc.)
-      // Replace selected text with formatted version
-      const newText = text.substring(0, selectionStart) + 
-                format + selectedText + format + 
-                text.substring(selectionEnd);
-      const newCursorPos = selectionStart + format.length + selectedText.length;
+      // Handle inline formatting (bold, italic, strikethrough, code, etc.)
+      const newText = value.substring(0, start) + 
+                      format + selectedText + format + 
+                      value.substring(end);
+      const newCursorPos = start + format.length + selectedText.length;
       
       onChange(newText);
       
       setTimeout(() => {
-        restoreCursorPosition(newCursorPos);
-        editor.focus();
+        textarea.setSelectionRange(newCursorPos, newCursorPos);
+        textarea.focus();
       }, 0);
     }
   };
 
   const handleClearFormat = () => {
-    const editor = editorRef.current;
-    if (!editor) return;
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
-    const cursorPos = saveCursorPosition();
-    if (cursorPos === null) return;
-
-    const text = editor.innerText;
+    const cursorPos = textarea.selectionStart;
     
     // Remove all formatting markers
-    const cleanedText = text
+    const cleanedText = value
       .replace(/\*\*\*/g, '')
       .replace(/\*\*/g, '')
       .replace(/\*/g, '')
@@ -152,42 +100,30 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     onChange(cleanedText);
     
     setTimeout(() => {
-      if (cursorPos !== null) {
-        restoreCursorPosition(cursorPos);
-      }
-      editor.focus();
+      // Adjust cursor position based on removed characters
+      const newCursorPos = Math.min(cursorPos, cleanedText.length);
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
     }, 0);
   };
 
   const handleEmojiSelect = (emoji: string) => {
-    const editor = editorRef.current;
-    if (!editor) return;
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
-    const cursorPos = saveCursorPosition();
-    if (cursorPos === null) return;
-
-    const text = editor.innerText;
-    const newText = text.substring(0, cursorPos) + 
+    const cursorPos = textarea.selectionStart;
+    const newText = value.substring(0, cursorPos) + 
                     emoji + 
-                    text.substring(cursorPos);
+                    value.substring(cursorPos);
     
     onChange(newText);
     setShowEmojiPicker(false);
     
     setTimeout(() => {
-      restoreCursorPosition(cursorPos + emoji.length);
-      editor.focus();
+      textarea.setSelectionRange(cursorPos + emoji.length, cursorPos + emoji.length);
+      textarea.focus();
     }, 0);
   };
-
-  // Sync external value changes only when editor is not focused
-  React.useEffect(() => {
-    if (editorRef.current && document.activeElement !== editorRef.current) {
-      if (editorRef.current.innerText !== value) {
-        editorRef.current.innerText = value;
-      }
-    }
-  }, [value]);
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
@@ -209,15 +145,15 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
       )}
       
       <div className="flex-1 p-4">
-        <div
-          ref={editorRef}
-          contentEditable
-          onInput={handleInput}
+        <textarea
+          ref={textareaRef}
+          value={value}
+          onChange={handleInput}
           onPaste={handlePaste}
-          suppressContentEditableWarning
-          className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-auto font-sans"
+          className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none font-sans"
           style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
           dir="auto"
+          placeholder="Type your message here..."
         />
       </div>
       
