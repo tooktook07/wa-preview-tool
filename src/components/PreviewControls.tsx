@@ -26,7 +26,7 @@ export default function PreviewControls({
   return (
     <div className="flex items-center gap-2">
       {/* Theme Toggle */}
-      <div className="flex items-center border border-border rounded-lg overflow-hidden shadow-sm bg-muted">
+      <div className="flex items-center border border-border rounded-lg overflow-hidden shadow-sm">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -61,7 +61,7 @@ export default function PreviewControls({
       </div>
 
       {/* Device Toggle */}
-      <div className="flex items-center border border-border rounded-lg overflow-hidden shadow-sm bg-muted">
+      <div className="flex items-center border border-border rounded-lg overflow-hidden shadow-sm">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -96,7 +96,7 @@ export default function PreviewControls({
       </div>
 
       {/* Message Mode Toggle */}
-      <div className="flex items-center border border-border rounded-lg overflow-hidden shadow-sm bg-muted">
+      <div className="flex items-center border border-border rounded-lg overflow-hidden shadow-sm">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
