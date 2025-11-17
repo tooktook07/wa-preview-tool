@@ -1,6 +1,7 @@
 import FormattingToolbar from "./FormattingToolbar";
 import EmojiPicker from "./EmojiPicker";
 import { useState, useRef } from "react";
+import * as React from "react";
 import { detectLineDirection } from "@/utils/formatParser";
 
 interface MessageComposerProps {
@@ -59,18 +60,42 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     }
   };
 
-  const handleInput = () => {
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     if (!editorRef.current) return;
-    const cursorPos = saveCursorPosition();
     const newValue = editorRef.current.innerText;
     onChange(newValue);
-    
-    // Restore cursor after React re-renders the content
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData('text/plain');
+    const cursorPos = saveCursorPosition();
+    if (cursorPos === null) return;
+
+    const currentText = editorRef.current?.innerText || '';
+    const newText = currentText.substring(0, cursorPos) + text + currentText.substring(cursorPos);
+    onChange(newText);
+
     setTimeout(() => {
-      if (cursorPos !== null) {
-        restoreCursorPosition(cursorPos);
-      }
+      restoreCursorPosition(cursorPos + text.length);
     }, 0);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    // Prevent default behavior that might cause issues
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const cursorPos = saveCursorPosition();
+      if (cursorPos === null) return;
+
+      const text = editorRef.current?.innerText || '';
+      const newText = text.substring(0, cursorPos) + '\n' + text.substring(cursorPos);
+      onChange(newText);
+
+      setTimeout(() => {
+        restoreCursorPosition(cursorPos + 1);
+      }, 0);
+    }
   };
 
   const handleFormat = (format: string) => {
@@ -168,27 +193,22 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     }, 0);
   };
 
-  // Render content with per-line direction
-  const renderContent = () => {
-    if (!value) return null;
-    
-    const lines = value.split('\n');
-    return lines.map((line, index) => {
-      const direction = detectLineDirection(line);
-      return (
-        <div 
-          key={index}
-          dir={direction}
-          style={{ 
-            textAlign: direction === 'rtl' ? 'right' : 'left',
-            minHeight: line === '' ? '1.5em' : 'auto'
-          }}
-        >
-          {line || '\u200B'}
-        </div>
-      );
-    });
+  // Sync content when value changes from outside
+  const syncContent = () => {
+    if (!editorRef.current) return;
+    if (editorRef.current.innerText !== value) {
+      const cursorPos = saveCursorPosition();
+      editorRef.current.innerText = value;
+      if (cursorPos !== null) {
+        setTimeout(() => restoreCursorPosition(cursorPos), 0);
+      }
+    }
   };
+
+  // Sync content when value prop changes
+  React.useEffect(() => {
+    syncContent();
+  }, [value]);
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
@@ -214,12 +234,12 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           ref={editorRef}
           contentEditable
           onInput={handleInput}
+          onPaste={handlePaste}
+          onKeyDown={handleKeyDown}
           suppressContentEditableWarning
           className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-auto font-sans"
           style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
-        >
-          {renderContent()}
-        </div>
+        />
       </div>
       
       <div className="p-3 border-t bg-muted/30 text-xs text-muted-foreground">
