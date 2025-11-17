@@ -81,23 +81,6 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
     }, 0);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    // Prevent default behavior that might cause issues
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const cursorPos = saveCursorPosition();
-      if (cursorPos === null) return;
-
-      const text = editorRef.current?.innerText || '';
-      const newText = text.substring(0, cursorPos) + '\n' + text.substring(cursorPos);
-      onChange(newText);
-
-      setTimeout(() => {
-        restoreCursorPosition(cursorPos + 1);
-      }, 0);
-    }
-  };
-
   const handleFormat = (format: string) => {
     const editor = editorRef.current;
     if (!editor) return;
@@ -235,7 +218,6 @@ export default function MessageComposer({ value, onChange }: MessageComposerProp
           contentEditable
           onInput={handleInput}
           onPaste={handlePaste}
-          onKeyDown={handleKeyDown}
           suppressContentEditableWarning
           className="h-full min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 overflow-auto font-sans"
           style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
