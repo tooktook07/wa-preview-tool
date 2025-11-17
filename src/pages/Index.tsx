@@ -1,14 +1,15 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import MessageComposer from "@/components/MessageComposer";
 import WhatsAppPreview from "@/components/WhatsAppPreview";
 import { MessageSquare } from "lucide-react";
 import { ThemeMode, DeviceMode } from "@/components/PreviewControls";
 import { detectRTL } from "@/utils/formatParser";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export default function Index() {
-  const [message, setMessage] = useState("");
-  const [theme, setTheme] = useState<ThemeMode>("light");
-  const [device, setDevice] = useState<DeviceMode>("desktop");
+  const [message, setMessage] = useLocalStorage("whatsapp-message-draft", "");
+  const [theme, setTheme] = useLocalStorage<ThemeMode>("whatsapp-preview-theme", "light");
+  const [device, setDevice] = useLocalStorage<DeviceMode>("whatsapp-preview-device", "desktop");
   
   const isRTL = useMemo(() => detectRTL(message), [message]);
 
