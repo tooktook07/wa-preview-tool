@@ -1,53 +1,100 @@
 import { parseWhatsAppFormatting, detectRTL } from "@/utils/formatParser";
 import { useMemo } from "react";
+import PreviewControls, { ThemeMode, DeviceMode } from "./PreviewControls";
 
 interface WhatsAppPreviewProps {
   message: string;
+  theme: ThemeMode;
+  device: DeviceMode;
+  onThemeChange: (theme: ThemeMode) => void;
+  onDeviceChange: (device: DeviceMode) => void;
 }
 
-export default function WhatsAppPreview({ message }: WhatsAppPreviewProps) {
+export default function WhatsAppPreview({ 
+  message, 
+  theme, 
+  device,
+  onThemeChange,
+  onDeviceChange 
+}: WhatsAppPreviewProps) {
   const isRTL = useMemo(() => detectRTL(message), [message]);
   const formattedMessage = useMemo(() => parseWhatsAppFormatting(message), [message]);
 
+  // Theme-specific colors
+  const bgColor = theme === "dark" ? "#0b141a" : "#efeae2";
+  const bubbleColor = theme === "dark" ? "#005c4b" : "#d9fdd3";
+  const textColor = theme === "dark" ? "#e9edef" : "#111b21";
+  const headerBg = theme === "dark" ? "#202c33" : "#25D366";
+  const headerText = "#ffffff";
+  
+  // Device-specific sizing
+  const maxWidth = device === "mobile" ? "375px" : "100%";
+  const bubbleMaxWidth = device === "mobile" ? "75%" : "85%";
+
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
-      <div className="p-4 border-b bg-whatsapp-green text-white">
-        <h2 className="text-lg font-semibold">WhatsApp Preview</h2>
-        <p className="text-sm opacity-90">Live preview of your formatted message</p>
+      <div 
+        className="p-4 border-b flex items-center justify-between"
+        style={{ backgroundColor: headerBg, color: headerText }}
+      >
+        <div>
+          <h2 className="text-lg font-semibold">WhatsApp Preview</h2>
+          <p className="text-sm opacity-90">Live preview of your formatted message</p>
+        </div>
+        <PreviewControls
+          theme={theme}
+          device={device}
+          onThemeChange={onThemeChange}
+          onDeviceChange={onDeviceChange}
+        />
       </div>
       
-      <div className="flex-1 p-6 bg-whatsapp-bg">
-        <div className="max-w-2xl mx-auto space-y-4">
-          {/* WhatsApp message bubble */}
+      <div 
+        className="flex-1 p-6 flex items-center justify-center"
+        style={{ backgroundColor: bgColor }}
+      >
+        <div 
+          className="w-full space-y-4 transition-all duration-300"
+          style={{ maxWidth }}
+        >
           <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'}`}>
             <div 
-              className="relative max-w-[85%] bg-whatsapp-bubble rounded-lg shadow-sm"
+              className="relative rounded-lg shadow-sm transition-all duration-200"
+              style={{ 
+                maxWidth: bubbleMaxWidth, 
+                backgroundColor: bubbleColor 
+              }}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              {/* Message tail */}
               <div 
                 className={`absolute top-0 ${isRTL ? 'left-0 -ml-2' : 'right-0 -mr-2'} w-0 h-0 
-                  border-t-[10px] border-t-whatsapp-bubble
+                  border-t-[10px]
                   ${isRTL ? 'border-r-[10px] border-r-transparent' : 'border-l-[10px] border-l-transparent'}`}
+                style={{ borderTopColor: bubbleColor }}
               />
               
-              {/* Message content */}
               <div className="px-3 py-2">
                 {message ? (
                   <div 
-                    className="text-whatsapp-text whitespace-pre-wrap break-words leading-relaxed"
+                    className="whitespace-pre-wrap break-words leading-relaxed"
+                    style={{ color: textColor }}
                     dangerouslySetInnerHTML={{ __html: formattedMessage }}
                   />
                 ) : (
-                  <p className="text-muted-foreground italic">
+                  <p 
+                    className="italic"
+                    style={{ color: theme === "dark" ? "#8696a0" : "#667781" }}
+                  >
                     Your message will appear here...
                   </p>
                 )}
                 
-                {/* Timestamp */}
                 {message && (
                   <div className={`flex items-center gap-1 mt-1 ${isRTL ? 'justify-start' : 'justify-end'}`}>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span 
+                      className="text-[11px]"
+                      style={{ color: theme === "dark" ? "#8696a0" : "#667781" }}
+                    >
                       {new Date().toLocaleTimeString('en-US', { 
                         hour: '2-digit', 
                         minute: '2-digit',
