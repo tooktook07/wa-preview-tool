@@ -9,7 +9,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 export default function Index() {
   const [message, setMessage] = useLocalStorage("whatsapp-message-draft", "");
   const [theme, setTheme] = useLocalStorage<ThemeMode>("whatsapp-preview-theme", "light");
-  const [device, setDevice] = useLocalStorage<DeviceMode>("whatsapp-preview-device", "desktop");
+  const [device, setDevice] = useLocalStorage<DeviceMode>("whatsapp-preview-device", "mobile");
   const [mode, setMode] = useLocalStorage<MessageMode>("whatsapp-message-mode", "sender");
   
   const isRTL = useMemo(() => detectRTL(message), [message]);
