@@ -153,8 +153,12 @@ All colors MUST be HSL.
 
 /* Prevent mobile Safari zoom on input focus */
 input[type="text"],
-textarea {
+textarea:not(.composer-textarea) {
   font-size: 16px !important;
+}
+
+.composer-textarea {
+  font-size: 14px !important;
 }
 
 @media (min-width: 768px) {
