@@ -169,6 +169,47 @@ export default function MessageComposer({
     }, 0);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const isMod = e.metaKey || e.ctrlKey;
+    
+    if (!isMod) return;
+
+    // Cmd/Ctrl + B → Bold
+    if (e.key === "b" && !e.shiftKey) {
+      e.preventDefault();
+      handleFormat("*");
+      return;
+    }
+
+    // Cmd/Ctrl + I → Italic
+    if (e.key === "i" && !e.shiftKey) {
+      e.preventDefault();
+      handleFormat("_");
+      return;
+    }
+
+    // Cmd/Ctrl + Shift + S → Strikethrough
+    if (e.key === "s" && e.shiftKey) {
+      e.preventDefault();
+      handleFormat("~");
+      return;
+    }
+
+    // Cmd/Ctrl + Shift + 8 → Bulleted List
+    if (e.key === "8" && e.shiftKey) {
+      e.preventDefault();
+      handleFormat("* ");
+      return;
+    }
+
+    // Cmd/Ctrl + Shift + 7 → Numbered List
+    if (e.key === "7" && e.shiftKey) {
+      e.preventDefault();
+      handleFormat("1. ");
+      return;
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border shadow-sm">
       <div className="p-2 sm:p-3 border-b bg-muted/30">
@@ -270,6 +311,7 @@ export default function MessageComposer({
           value={value}
           onChange={handleInput}
           onPaste={handlePaste}
+          onKeyDown={handleKeyDown}
           placeholder="Type your WhatsApp message here..."
           className="composer-textarea flex-1 w-full p-3 sm:p-4 bg-transparent border-none outline-none resize-none font-sans leading-relaxed text-foreground placeholder:text-muted-foreground"
         />
@@ -290,7 +332,7 @@ export default function MessageComposer({
       {/* Footer Tip */}
       <div className="px-4 py-2 border-t bg-muted/30">
         <p className="text-xs text-muted-foreground text-center">
-          💡 Tip: Select text and click formatting buttons, or type markers directly (*bold*, _italic_, ~strikethrough~)
+          💡 Tip: Use ⌘B for bold, ⌘I for italic, ⌘⇧7/8 for lists, or type markers directly
         </p>
       </div>
 
