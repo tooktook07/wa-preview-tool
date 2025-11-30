@@ -246,34 +246,66 @@ export function HelpModal({ open, onOpenChange, onRestartTour }: HelpModalProps)
               <div>
                 <h3 className="font-semibold text-base mb-2">Keyboard Shortcuts</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Coming soon! Keyboard shortcuts will be added in a future update to speed up your workflow.
+                  Speed up your workflow with these keyboard shortcuts. Select text first for inline formatting.
                 </p>
               </div>
 
               <div className="p-4 bg-muted/30 rounded-md">
-                <h4 className="font-medium text-sm mb-3">Planned Shortcuts</h4>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex justify-between">
-                    <span>Bold selected text</span>
-                    <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+B</code>
+                <h4 className="font-medium text-sm mb-3">Text Formatting</h4>
+                <div className="space-y-2.5 text-sm text-muted-foreground">
+                  <div className="flex justify-between items-center">
+                    <span>Bold</span>
+                    <div className="flex gap-2">
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">⌘B</code>
+                      <span className="text-xs text-muted-foreground/60">or</span>
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+B</code>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Italic selected text</span>
-                    <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+I</code>
+                  <div className="flex justify-between items-center">
+                    <span>Italic</span>
+                    <div className="flex gap-2">
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">⌘I</code>
+                      <span className="text-xs text-muted-foreground/60">or</span>
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+I</code>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Inline code</span>
-                    <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+K</code>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Switch drafts</span>
-                    <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+1/2/3</code>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Open help</span>
-                    <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+/</code>
+                  <div className="flex justify-between items-center">
+                    <span>Strikethrough</span>
+                    <div className="flex gap-2">
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">⌘⇧S</code>
+                      <span className="text-xs text-muted-foreground/60">or</span>
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+Shift+S</code>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="p-4 bg-muted/30 rounded-md">
+                <h4 className="font-medium text-sm mb-3">Lists</h4>
+                <div className="space-y-2.5 text-sm text-muted-foreground">
+                  <div className="flex justify-between items-center">
+                    <span>Bulleted List</span>
+                    <div className="flex gap-2">
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">⌘⇧8</code>
+                      <span className="text-xs text-muted-foreground/60">or</span>
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+Shift+8</code>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Numbered List</span>
+                    <div className="flex gap-2">
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">⌘⇧7</code>
+                      <span className="text-xs text-muted-foreground/60">or</span>
+                      <code className="bg-background px-2 py-0.5 rounded text-xs">Ctrl+Shift+7</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3 bg-primary/5 rounded-md border border-primary/20">
+                <p className="text-xs text-muted-foreground">
+                  <strong>Tip:</strong> On Mac, use ⌘ (Command). On Windows/Linux, use Ctrl.
+                </p>
               </div>
             </TabsContent>
 
